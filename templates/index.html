@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLACE - Ingredientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
+
+    <header
+        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-2 md:space-x-3 ml-2">
+            <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo"
+                class="w-8 h-8 md:w-10 md:h-10">
+            <h1 class="text-xl md:text-2xl font-bold tracking-widest text-[#E052A0]">GLACE</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217]">
+            <a href="/dashboard"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
+            <a href="/pedidos"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
+            <a href="/"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
+            <a href="/receitas"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
+        </nav>
+
+        <div class="flex items-center space-x-2 mr-2 md:mr-4">
+            <button onclick="toggleMobileMenu()"
+                class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
+                <i class="fas fa-bars text-sm"></i>
+            </button>
+            <button
+                class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
+                <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Sair</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="mobileMenu"
+        class="hidden md:hidden mx-2 md:mx-4 mt-2 bg-[#121217] border border-gray-800 rounded-xl p-3 space-y-1 shadow-lg z-50">
+        <a href="/dashboard"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Dashboard</a>
+        <a href="/pedidos"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Pedidos</a>
+        <a href="/"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
+        <a href="/receitas"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
+    </div>
+
+    <main class="p-4 md:p-8 max-w-7xl mx-auto bg-white mt-4 md:mt-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 space-y-4 lg:space-y-0">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 flex flex-wrap items-center gap-2">
+                    Controle de Ingredientes
+                </h2>
+                <p class="text-gray-400 text-sm mt-1">{{ ingredientes|length }} ingredientes base em estoque</p>
+            </div>
+            <div
+                class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3 w-full lg:w-auto">
+                <div class="relative w-full sm:w-64">
+                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar ingrediente..."
+                        class="pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg w-full focus:outline-none focus:border-[#E052A0] text-sm">
+                </div>
+
+                <button onclick="abrirModalEntrada()"
+                    class="bg-[#E052A0] hover:bg-[#c9438d] text-white px-4 py-2.5 rounded-lg font-medium transition text-sm flex items-center justify-center space-x-2 shadow-sm">
+                    <i class="fas fa-plus"></i> <span>Registrar manualmente</span>
+                </button>
+
+                <a href="/scanner"
+                    class="bg-black hover:bg-gray-800 text-white px-4 py-2.5 rounded-lg font-medium transition text-center text-sm flex items-center justify-center space-x-2 whitespace-nowrap shadow-sm">
+                    <i class="fas fa-camera"></i> <span>Escanear GTIN</span>
+                </a>
+            </div>
+        </div>
+
+        {% if alertas > 0 %}
+        <div class="bg-red-50 border border-red-100 text-red-600 p-3 md:p-4 rounded-lg mb-6 flex items-center text-sm">
+            <i class="fas fa-exclamation-triangle mr-3 text-lg shrink-0"></i>
+            <span class="font-medium">{{ alertas }} ingrediente(s) zerados ou abaixo do estoque mínimo definido</span>
+        </div>
+        {% endif %}
+
+        <div class="overflow-x-auto border border-gray-100 rounded-lg">
+            <table class="w-full text-left whitespace-nowrap" id="ingredientesTable">
+                <thead class="text-xs text-gray-400 uppercase bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th class="px-4 md:px-6 py-3 md:py-4 font-bold tracking-wider">Nome Base</th>
+                        <th class="px-4 md:px-6 py-3 md:py-4 font-bold tracking-wider">Qtd Estoque</th>
+                        <th class="px-4 md:px-6 py-3 md:py-4 font-bold tracking-wider">Custo Médio (CMPM)</th>
+                        <th class="px-4 md:px-6 py-3 md:py-4 font-bold tracking-wider text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 text-sm">
+                    {% for ing in ingredientes %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 md:px-6 py-4 flex items-center space-x-3">
+                            <div class="bg-orange-50 p-2 rounded text-orange-400 shrink-0"><i class="fas fa-cube"></i>
+                            </div>
+                            <span class="font-bold text-gray-800">{{ ing.nome }}</span>
+                            {% if ing.zerado %}
+                            <span
+                                class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ZERADO</span>
+                            {% elif ing.estoque_baixo %}
+                            <span class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-full">ESTOQUE
+                                BAIXO</span>
+                            {% endif %}
+                        </td>
+                        <td
+                            class="px-4 md:px-6 py-4 font-bold {% if ing.zerado or ing.estoque_baixo %}text-red-500{% else %}text-gray-800{% endif %}">
+                            {{ "%.2f"|format(ing.quantidade) }} <span class="text-xs text-gray-400">{{ ing.un_medida
+                                }}</span>
+                        </td>
+                        <td class="px-4 md:px-6 py-4 text-emerald-600 font-bold">
+                            R$ {{ "%.4f"|format(ing.custo_medio_base) }} <span
+                                class="text-xs font-normal text-gray-400">/{{ ing.un_medida }}</span>
+                        </td>
+                        <td class="px-4 md:px-6 py-4 text-center">
+                            <button
+                                onclick="abrirModalEdicao({{ ing.id }}, '{{ ing.nome }}', {{ ing.quantidade }}, {{ ing.estoque_minimo }})"
+                                class="text-[#E052A0] hover:text-[#c9438d] transition px-3 py-1.5 bg-pink-50 rounded-lg text-xs font-bold inline-flex items-center">
+                                <i class="fas fa-edit mr-1"></i> Editar
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="modalEntrada" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 md:p-8 rounded-xl w-full max-w-lg relative shadow-2xl overflow-y-auto max-h-[95vh]">
+            <button onclick="fecharModalEntrada()" class="absolute top-4 right-4 text-gray-400 hover:text-black p-2"><i
+                    class="fas fa-times text-lg"></i></button>
+            <h3 class="text-xl font-bold mb-4 text-gray-900 border-b pb-2">Registrar Entrada</h3>
+
+            <form id="formEntrada" onsubmit="salvarEntrada(event)" class="space-y-4">
+                <input type="hidden" id="ingrediente_id_oculto" value="">
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Digitar código GTIN (Opcional)</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="entGtin" placeholder="Código de Barras"
+                            class="w-full border rounded-lg px-3 py-2 text-sm focus:border-[#E052A0] focus:outline-none bg-gray-50">
+                        <button type="button" onclick="buscarPorGtin()"
+                            class="bg-gray-800 text-white px-4 rounded-lg font-bold hover:bg-black transition"><i
+                                class="fas fa-search"></i></button>
+                    </div>
+                    <p id="msgGtin" class="text-xs mt-1 font-bold"></p>
+                </div>
+
+                <datalist id="listaSugestoes"></datalist>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Ingrediente Base</label>
+                        <input type="text" id="entNome" list="listaSugestoes" oninput="buscarSugestoes()"
+                            autocomplete="off" required placeholder="Ex: Manteiga Sem Sal"
+                            class="w-full border rounded-lg px-3 py-2 text-sm focus:border-[#E052A0] focus:outline-none">
+                        <p class="text-[10px] text-gray-500 mt-1">Ao selecionar um item existente, o estoque será
+                            somado.</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Unidade Base</label>
+                        <select id="entUnMedida" required
+                            class="w-full border rounded-lg px-3 py-2 text-sm focus:border-[#E052A0] focus:outline-none">
+                            <option value="g">Gramas (g)</option>
+                            <option value="ml">Mililitros (ml)</option>
+                            <option value="un">Unidade (un)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Conteúdo por
+                            Embalagem</label>
+                        <input type="number" step="0.01" id="entConteudo" required placeholder="Ex: 200"
+                            class="w-full border rounded-lg px-3 py-2 text-sm focus:border-[#E052A0] focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t pt-4">
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-700 uppercase mb-1">Qtd. Embalagens
+                            Compradas</label>
+                        <input type="number" step="0.01" id="entQtdEmbalagens" required placeholder="Ex: 3"
+                            class="w-full border-2 border-emerald-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-700 uppercase mb-1">Preço Pago (por
+                            embalagem)</label>
+                        <input type="number" step="0.01" id="entPrecoEmbalagem" required placeholder="Ex: 14.50"
+                            class="w-full border-2 border-emerald-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button type="submit"
+                        class="bg-[#E052A0] hover:bg-[#c9438d] text-white py-3 rounded-lg font-bold w-full transition shadow-md text-sm">Processar
+                        Entrada (CMPM)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 md:p-8 rounded-xl w-full max-w-sm relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharModalEdicao()" class="absolute top-4 right-4 text-gray-400 hover:text-black p-2"><i
+                    class="fas fa-times text-lg"></i></button>
+
+            <h3 class="text-xl font-bold mb-1 text-gray-800">Editar Ingrediente</h3>
+            <p id="editNome" class="text-sm font-medium text-[#E052A0] mb-6 truncate"></p>
+
+            <div
+                class="flex items-center justify-between bg-gray-50 border border-gray-200 p-4 rounded-xl mb-6 shadow-inner">
+                <span class="font-bold text-gray-600 text-xs tracking-wider">ESTOQUE ATUAL</span>
+                <div class="flex items-center space-x-3">
+                    <button onclick="alterarQtd(-1)"
+                        class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-full hover:bg-gray-100 font-bold text-xl text-gray-700 shadow-sm transition">-</button>
+                    <span id="editQtdText" class="font-bold text-xl w-12 text-center text-gray-800">0</span>
+                    <button onclick="alterarQtd(1)"
+                        class="w-10 h-10 flex items-center justify-center bg-[#E052A0] text-white rounded-full hover:bg-[#c9438d] font-bold text-xl shadow-sm transition">+</button>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-gray-500 mb-2 tracking-wider">AVISO DE ESTOQUE BAIXO
+                    (MÍNIMO)</label>
+                <div class="relative">
+                    <i class="fas fa-bell absolute left-3.5 top-3.5 text-gray-400"></i>
+                    <input type="number" step="0.1" id="editEstoqueMinimo"
+                        class="w-full border border-gray-300 pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:border-[#E052A0] text-gray-700 font-medium text-sm"
+                        placeholder="Ex: 8">
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center border-t border-gray-100 pt-4 gap-2">
+                <button onclick="excluirIngrediente()"
+                    class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-lg font-bold flex items-center transition text-sm">
+                    <i class="fas fa-trash-alt mr-1.5"></i> Excluir
+                </button>
+                <button onclick="salvarEdicao()"
+                    class="bg-black text-white px-5 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-md text-sm">
+                    Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        function abrirModalEntrada() {
+            document.getElementById('formEntrada').reset();
+            document.getElementById('ingrediente_id_oculto').value = '';
+            document.getElementById('msgGtin').innerText = '';
+            document.getElementById('modalEntrada').classList.remove('hidden');
+        }
+
+        function fecharModalEntrada() {
+            document.getElementById('modalEntrada').classList.add('hidden');
+        }
+
+        // Lógica de Autocomplete do HTML5 Datalist
+        async function buscarSugestoes() {
+            const termo = document.getElementById('entNome').value;
+            if (termo.length < 2) return;
+
+            const res = await fetch(`/api/ingredientes/buscar?q=${encodeURIComponent(termo)}`);
+            const data = await res.json();
+
+            const datalist = document.getElementById('listaSugestoes');
+            datalist.innerHTML = '';
+
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.nome;
+                datalist.appendChild(option);
+            });
+        }
+
+        // Lógica de Escaneamento e Preenchimento Automático
+        async function buscarPorGtin() {
+            const gtin = document.getElementById('entGtin').value.trim();
+            if (!gtin) return;
+
+            const msg = document.getElementById('msgGtin');
+            msg.innerText = "Buscando...";
+            msg.className = "text-xs mt-1 font-bold text-gray-500";
+
+            const res = await fetch(`/api/gtin/${gtin}`);
+            const data = await res.json();
+
+            if (data.existe) {
+                msg.innerText = "GTIN Encontrado! Preenchido automaticamente.";
+                msg.className = "text-xs mt-1 font-bold text-emerald-600";
+
+                document.getElementById('ingrediente_id_oculto').value = data.id;
+                document.getElementById('entNome').value = data.nome;
+                document.getElementById('entUnMedida').value = data.un_medida;
+                document.getElementById('entConteudo').value = data.conteudo_por_embalagem;
+
+                // Pula direto para a inserção de QTD de pacotes
+                document.getElementById('entQtdEmbalagens').focus();
+            } else {
+                msg.innerText = "GTIN Novo. Preencha os dados base para vincular ou criar um novo.";
+                msg.className = "text-xs mt-1 font-bold text-orange-500";
+                document.getElementById('entNome').focus();
+            }
+        }
+
+        // Intercepta Enter no GTIN para buscar sem dar submit
+        document.getElementById('entGtin').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarPorGtin();
+            }
+        });
+
+        async function salvarEntrada(e) {
+            e.preventDefault();
+
+            const payload = {
+                gtin: document.getElementById('entGtin').value,
+                ingrediente_id: document.getElementById('ingrediente_id_oculto').value,
+                nome: document.getElementById('entNome').value,
+                un_medida: document.getElementById('entUnMedida').value,
+                conteudo_por_embalagem: document.getElementById('entConteudo').value,
+                qtd_embalagens: document.getElementById('entQtdEmbalagens').value,
+                preco_por_embalagem: document.getElementById('entPrecoEmbalagem').value
+            };
+
+            const res = await fetch('/api/ingredientes/entrada', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                const erro = await res.json();
+                alert("Erro ao salvar: " + erro.erro);
+            }
+        }
+
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toUpperCase();
+            let table = document.getElementById("ingredientesTable");
+            let tr = table.getElementsByTagName("tr");
+            for (let i = 1; i < tr.length; i++) {
+                let td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    let txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        // Funções do Modal de Edição
+        let idEditando = null;
+        let qtdEditando = 0;
+
+        function abrirModalEdicao(id, nome, quantidadeAtual, estoqueMinimoAtual) {
+            idEditando = id;
+            qtdEditando = parseFloat(quantidadeAtual);
+
+            document.getElementById('editNome').innerText = nome;
+            document.getElementById('editEstoqueMinimo').value = estoqueMinimoAtual;
+            atualizarDisplayQtd();
+
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function fecharModalEdicao() {
+            document.getElementById('editModal').classList.add('hidden');
+            idEditando = null;
+        }
+
+        function alterarQtd(valorAlteracao) {
+            qtdEditando += valorAlteracao;
+            if (qtdEditando < 0) qtdEditando = 0;
+            atualizarDisplayQtd();
+        }
+
+        function atualizarDisplayQtd() {
+            document.getElementById('editQtdText').innerText = parseFloat(qtdEditando.toFixed(2));
+        }
+
+        async function salvarEdicao() {
+            if (!idEditando) return;
+            const novoEstoqueMinimo = document.getElementById('editEstoqueMinimo').value || 0;
+
+            await fetch(`/api/ingredientes/${idEditando}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    quantidade: qtdEditando,
+                    estoque_minimo: parseFloat(novoEstoqueMinimo)
+                })
+            });
+            window.location.reload();
+        }
+
+        async function excluirIngrediente() {
+            if (!idEditando) return;
+            if (confirm("Tem certeza que deseja apagar este ingrediente?")) {
+                await fetch(`/api/ingredientes/${idEditando}`, { method: 'DELETE' });
+                window.location.reload();
+            }
+        }
+
+        async function buscarSugestoes() {
+            const inputNome = document.getElementById('entNome');
+            const termo = inputNome.value.trim();
+            const datalist = document.getElementById('listaSugestoes');
+
+            // Limpa o ID oculto caso o usuário apague ou altere o texto digitado
+            document.getElementById('ingrediente_id_oculto').value = '';
+
+            if (termo.length < 2) {
+                datalist.innerHTML = '';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/ingredientes/buscar?q=${encodeURIComponent(termo)}`);
+                const data = await res.json();
+
+                datalist.innerHTML = '';
+
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.nome;
+                    // Vincula o ID correspondente para sabermos qual item atualizar
+                    option.dataset.id = item.id;
+                    datalist.appendChild(option);
+                });
+            } catch (e) {
+                console.error("Erro ao buscar sugestões:", e);
+            }
+        }
+
+        // Evento para capturar quando o usuário seleciona um item da lista do datalist
+        document.getElementById('entNome').addEventListener('input', async function () {
+            const valorSelecionado = this.value;
+            const datalist = document.getElementById('listaSugestoes');
+            const options = datalist.options;
+
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === valorSelecionado) {
+                    // Se o usuário selecionou um item existente, buscamos e guardamos o ID dele no input oculto
+                    const res = await fetch(`/api/ingredientes/buscar?q=${encodeURIComponent(valorSelecionado)}`);
+                    const data = await res.json();
+                    const encontrado = data.find(item => item.nome.toLowerCase() === valorSelecionado.toLowerCase());
+                    if (encontrado) {
+                        document.getElementById('ingrediente_id_oculto').value = encontrado.id;
+                    }
+                    break;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

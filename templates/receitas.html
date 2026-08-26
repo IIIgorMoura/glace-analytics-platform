@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLACE - Receitas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
+
+    <!-- Header Padronizado GLACE -->
+    <header
+        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-2 md:space-x-3 ml-2">
+            <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo"
+                class="w-8 h-8 md:w-10 md:h-10">
+            <h1 class="text-xl md:text-2xl font-bold tracking-widest text-[#E052A0]">GLACE</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217]">
+            <a href="/dashboard"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
+            <a href="/pedidos"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
+            <a href="/"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
+            <a href="/receitas"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
+        </nav>
+
+        <div class="flex items-center space-x-2 mr-2 md:mr-4">
+            <button onclick="toggleMobileMenu()"
+                class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
+                <i class="fas fa-bars text-sm"></i>
+            </button>
+
+            <button
+                class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
+                <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Sair</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Menu Dropdown Mobile (Aparece ao clicar no hambúrguer) -->
+    <div id="mobileMenu"
+        class="hidden md:hidden mx-2 md:mx-4 mt-2 bg-[#121217] border border-gray-800 rounded-xl p-3 space-y-1 shadow-lg z-50">
+        <a href="/dashboard"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Dashboard</a>
+        <a href="/pedidos"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Pedidos</a>
+        <a href="/"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
+        <a href="/receitas"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
+    </div>
+
+    <main class="p-4 md:p-8 max-w-5xl mx-auto space-y-4 mb-8">
+        <!-- Topo com Título e Botões de Ação Principal -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Receitas</h2>
+                <p class="text-xs text-gray-400 mt-0.5">Gerenciamento completo de receitas e fichas técnicas</p>
+            </div>
+            <div class="flex space-x-2">
+                <button onclick="abrirModalCriar()"
+                    class="bg-[#E052A0] hover:bg-[#c9438d] text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm">
+                    <i class="fas fa-plus"></i> <span>Nova Receita</span>
+                </button>
+                <button onclick="abrirModalCategoria()"
+                    class="border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1">
+                    <i class="fas fa-folder-plus"></i> <span>Nova Categoria</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Listagem de Categorias com Expandir/Minimizar Nativo (<details>) -->
+        <div class="space-y-4">
+            {% for cat in categorias %}
+            <details class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden group" open>
+                <summary
+                    class="p-5 flex items-center justify-between bg-white border-b border-gray-100 cursor-pointer select-none">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                            <i class="fas fa-ice-cream"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base text-gray-900">{{ cat.nome }}</h3>
+                            <p class="text-xs text-gray-400">{{ cat.receitas|length }} receitas cadastradas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="event.stopPropagation(); deletarCategoria({{ cat.id }})"
+                            class="border border-red-100 bg-red-50/50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1"
+                            title="Excluir Categoria">
+                            <i class="fas fa-trash"></i> <span>Excluir</span>
+                        </button>
+                        <span class="text-sm text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+                    </div>
+                </summary>
+
+                <div class="divide-y divide-gray-100 bg-white px-6">
+                    {% for rec in cat.receitas %}
+                    <div class="py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div class="max-w-md">
+                            <div class="flex items-center space-x-2">
+                                <h4 class="font-bold text-gray-900 text-base">{{ rec.nome }}</h4>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Preparo: {{ rec.preparo[:60] }}...</p>
+                        </div>
+                        <div class="flex items-center space-x-6 w-full md:w-auto justify-between md:justify-end">
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase font-bold text-gray-400">Preço</p>
+                                <p class="text-sm font-bold text-gray-900">R$ {{ "%.2f"|format(rec.preco_venda) }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase font-bold text-gray-400">Custo</p>
+                                <p class="text-sm font-bold text-gray-900">R$ {{ "%.2f"|format(rec.custo) }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase font-bold text-gray-400">Margem</p>
+                                <p class="text-sm font-bold text-emerald-600">{{ rec.margem }}%</p>
+                            </div>
+                            <div class="text-right hidden sm:block">
+                                <p class="text-[10px] uppercase font-bold text-gray-400">Tempo</p>
+                                <p class="text-sm font-medium text-gray-600"><i class="far fa-clock text-xs"></i> {{
+                                    rec.tempo }}min</p>
+                            </div>
+                            <!-- Botões de Editar e Excluir posicionados corretamente dentro do loop -->
+                            <div class="flex space-x-2">
+                                <button onclick="abrirModalEditar(this)" data-id="{{ rec.id }}"
+                                    data-nome="{{ rec.nome }}" data-categoria="{{ rec.categoria_id }}"
+                                    data-tempo="{{ rec.tempo }}" data-preco="{{ rec.preco_venda }}"
+                                    data-preparo="{{ rec.preparo }}"
+                                    data-ingredientes='{{ rec.ingredientes | tojson | forceescape }}'
+                                    class="border border-blue-100 bg-blue-50/50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1"
+                                    title="Editar Receita">
+                                    <i class="fas fa-edit"></i> <span>Editar</span>
+                                </button>
+                                <button onclick="deletarReceita({{ rec.id }})"
+                                    class="border border-red-100 bg-red-50/50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1"
+                                    title="Excluir Receita">
+                                    <i class="fas fa-trash"></i> <span>Excluir</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="py-4 text-xs text-gray-400 italic">Nenhuma receita nesta categoria ainda.</p>
+                    {% endfor %}
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- MODAL DE CRIAR / EDITAR RECEITA -->
+    <div id="modalReceita"
+        class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h3 id="modalTitulo" class="text-xl font-bold text-gray-900">Nova Receita</h3>
+                <button onclick="fecharModal()" class="text-gray-400 hover:text-gray-600"><i
+                        class="fas fa-times text-lg"></i></button>
+            </div>
+
+            <form id="formReceita" onsubmit="salvarReceita(event)" class="space-y-4">
+                <input type="hidden" id="receitaId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome da Receita</label>
+                        <input type="text" id="recNome" required
+                            class="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#E052A0]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                        <select id="recCategoria"
+                            class="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#E052A0]"
+                            required>
+                            {% for cat in categorias %}
+                            <option value="{{ cat.id }}">{{ cat.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tempo de Preparo
+                            (min)</label>
+                        <input type="number" id="recTempo" required
+                            class="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#E052A0]"
+                            placeholder="Ex: 30">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço de Venda (R$)</label>
+                        <input type="number" step="0.01" id="recPreco" required
+                            class="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#E052A0]"
+                            placeholder="Ex: 32.00">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Ingredientes do Estoque</label>
+                        <button type="button" onclick="adicionarLinhaIngrediente()"
+                            class="text-xs text-[#E052A0] font-bold hover:underline">
+                            <i class="fas fa-plus mr-1"></i> Adicionar Ingrediente
+                        </button>
+                    </div>
+                    <div id="listaIngredientesContainer"
+                        class="space-y-2 border border-gray-100 p-3 rounded-xl bg-gray-50/50">
+                        <!-- Inserido dinamicamente via JS -->
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Modo de Preparo</label>
+                    <textarea id="recPreparo" rows="4" required
+                        class="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#E052A0]"
+                        placeholder="Descreva o passo a passo..."></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t">
+                    <button type="button" onclick="fecharModal()"
+                        class="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">Cancelar</button>
+                    <button type="submit"
+                        class="bg-[#E052A0] hover:bg-[#c9438d] text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-sm">Salvar
+                        Receita</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CRIAR CATEGORIA -->
+    <div id="modalCategoria" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900">Nova Categoria</h3>
+                <button onclick="fecharModalCategoria()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <form id="formCategoria" onsubmit="salvarCategoria(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome da Categoria</label>
+                    <input type="text" id="catNome" required
+                        class="w-full border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#E052A0]"
+                        placeholder="Ex: Bolos, Bebidas...">
+                </div>
+
+                <!-- Mensagem de erro customizada -->
+                <p id="erroCategoria" class="text-red-500 text-xs hidden"></p>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t">
+                    <button type="button" onclick="fecharModalCategoria()"
+                        class="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">Cancelar</button>
+                    <button type="submit"
+                        class="bg-[#E052A0] hover:bg-[#c9438d] text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-sm">Criar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Ingredientes vindos do backend corrigidos sem espaços extras
+        const ingredientesBD = [
+    {% for ing in ingredientes_disponiveis %}
+    { id: {{ ing.id }}, nome: {{ ing.nome | tojson }}, unidade: {{ ing.un_medida | tojson }} },
+    {% endfor %}
+];
+
+        function abrirModalCriar() {
+            document.getElementById('modalTitulo').innerText = 'Nova Receita';
+            document.getElementById('formReceita').reset();
+            document.getElementById('receitaId').value = '';
+            document.getElementById('listaIngredientesContainer').innerHTML = '';
+            adicionarLinhaIngrediente();
+            document.getElementById('modalReceita').classList.remove('hidden');
+        }
+
+        function fecharModal() {
+            document.getElementById('modalReceita').classList.add('hidden');
+        }
+
+        // --- NOVAS FUNÇÕES DO MODAL DE CATEGORIA ---
+
+        function abrirModalCategoria() {
+            document.getElementById('formCategoria').reset();
+            document.getElementById('erroCategoria').classList.add('hidden');
+            document.getElementById('modalCategoria').classList.remove('hidden');
+        }
+
+        function fecharModalCategoria() {
+            document.getElementById('modalCategoria').classList.add('hidden');
+        }
+
+        async function salvarCategoria(event) {
+            event.preventDefault(); // Evita o recarregamento indesejado da página
+            const nomeCat = document.getElementById('catNome').value;
+            const msgErro = document.getElementById('erroCategoria');
+
+            try {
+                const response = await fetch('/api/categorias', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: nomeCat })
+                });
+
+                const resultado = await response.json();
+
+                if (response.ok) {
+                    // Sucesso! Recarrega a página para exibir a nova categoria na lista
+                    location.reload();
+                } else {
+                    // Mostra o erro em vermelho dentro do modal
+                    msgErro.innerText = resultado.erro || 'Erro ao criar categoria.';
+                    msgErro.classList.remove('hidden');
+                }
+            } catch (erro) {
+                msgErro.innerText = 'Erro de comunicação com o servidor.';
+                msgErro.classList.remove('hidden');
+            }
+        }
+
+        // --- FIM DAS NOVAS FUNÇÕES ---
+
+        async function deletarCategoria(id) {
+            if (!confirm('Deseja realmente excluir esta categoria? As receitas dela ficarão sem categoria.')) return;
+
+            const resposta = await fetch(`/api/categorias/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (resposta.ok) {
+                location.reload();
+            } else {
+                alert('Erro ao excluir categoria.');
+            }
+        }
+
+        function abrirModalEditar(botao) {
+            document.getElementById('modalTitulo').innerText = 'Editar Receita';
+            document.getElementById('formReceita').reset();
+
+            // Pega os dados direto dos atributos "data-" do botão clicado
+            document.getElementById('receitaId').value = botao.getAttribute('data-id');
+            document.getElementById('recNome').value = botao.getAttribute('data-nome');
+            document.getElementById('recCategoria').value = botao.getAttribute('data-categoria');
+            document.getElementById('recTempo').value = botao.getAttribute('data-tempo');
+            document.getElementById('recPreco').value = botao.getAttribute('data-preco');
+            document.getElementById('recPreparo').value = botao.getAttribute('data-preparo');
+
+            // Limpa o container
+            const container = document.getElementById('listaIngredientesContainer');
+            container.innerHTML = '';
+
+            // CARREGA OS INGREDIENTES SALVOS DA RECEITA
+            const ingredientesRaw = botao.getAttribute('data-ingredientes');
+            const ingredientes = JSON.parse(ingredientesRaw || '[]');
+
+            if (ingredientes.length > 0) {
+                ingredientes.forEach(ing => {
+                    adicionarLinhaIngrediente(ing.id, ing.quantidade);
+                });
+            } else {
+                adicionarLinhaIngrediente();
+            }
+
+            document.getElementById('modalReceita').classList.remove('hidden');
+        }
+
+        function adicionarLinhaIngrediente(ingredienteId = '', quantidade = '') {
+            const container = document.getElementById('listaIngredientesContainer');
+            const div = document.createElement('div');
+            div.className = 'flex items-center space-x-2';
+
+            let optionsHtml = '<option value="">Selecione um ingrediente...</option>';
+            ingredientesBD.forEach(ing => {
+                const selected = ing.id == ingredienteId ? 'selected' : '';
+                optionsHtml += `<option value="${ing.id}" ${selected}>${ing.nome} (${ing.unidade})</option>`;
+            });
+
+            div.innerHTML = `
+            <select class="ing-select flex-1 border rounded-lg px-3 py-1.5 text-xs bg-white focus:outline-none focus:border-[#E052A0]" required>
+                ${optionsHtml}
+            </select>
+            <input type="number" step="0.01" placeholder="Qtd" value="${quantidade}" class="ing-qtd w-24 border rounded-lg px-3 py-1.5 text-xs bg-white focus:outline-none focus:border-[#E052A0]" required>
+            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 px-2 py-1 text-xs"><i class="fas fa-trash"></i></button>
+        `;
+            container.appendChild(div);
+        }
+
+        async function salvarReceita(event) {
+            event.preventDefault();
+            const id = document.getElementById('receitaId').value;
+
+            const ingredientesUsados = [];
+            const linhas = document.querySelectorAll('#listaIngredientesContainer > div');
+            linhas.forEach(linha => {
+                const ingId = linha.querySelector('.ing-select').value;
+                const qtd = linha.querySelector('.ing-qtd').value;
+                if (ingId && qtd) {
+                    ingredientesUsados.push({ id: ingId, quantidade: qtd });
+                }
+            });
+
+            const dados = {
+                nome: document.getElementById('recNome').value,
+                categoria_id: document.getElementById('recCategoria').value,
+                tempo: document.getElementById('recTempo').value,
+                preco_venda: document.getElementById('recPreco').value,
+                preparo: document.getElementById('recPreparo').value,
+                ingredientes: ingredientesUsados
+            };
+
+            const url = id ? `/api/receitas/atualizar/${id}` : '/api/receitas/salvar';
+            const metodo = id ? 'PUT' : 'POST';
+
+            const resposta = await fetch(url, {
+                method: metodo,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if (resposta.ok) {
+                location.reload();
+            } else {
+                alert('Erro ao salvar receita.');
+            }
+        }
+
+        async function deletarReceita(id) {
+            if (!confirm('Deseja realmente excluir esta receita?')) return;
+
+            const resposta = await fetch(`/api/receitas/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (resposta.ok) {
+                location.reload();
+            } else {
+                alert('Erro ao excluir receita.');
+            }
+        }
+    </script>
+</body>
+
+</html>

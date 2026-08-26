@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLACE - Pedidos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
+
+    <header
+        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-2 md:space-x-3 ml-2">
+            <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo"
+                class="w-8 h-8 md:w-10 md:h-10">
+            <h1 class="text-xl md:text-2xl font-bold tracking-widest text-[#E052A0]">GLACE</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217]">
+            <a href="/dashboard"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
+            <a href="/pedidos"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
+            <a href="/"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
+            <a href="/receitas"
+                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
+        </nav>
+
+        <div class="flex items-center space-x-2 mr-2 md:mr-4">
+            <button onclick="toggleMobileMenu()"
+                class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
+                <i class="fas fa-bars text-sm"></i>
+            </button>
+
+            <button
+                class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
+                <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Sair</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="mobileMenu"
+        class="hidden md:hidden mx-2 md:mx-4 mt-2 bg-[#121217] border border-gray-800 rounded-xl p-3 space-y-1 shadow-lg z-50">
+        <a href="/dashboard"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Dashboard</a>
+        <a href="/pedidos"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Pedidos</a>
+        <a href="/"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
+        <a href="/receitas"
+            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
+    </div>
+
+    <main class="p-4 md:p-8 max-w-7xl mx-auto bg-white mt-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
+
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Gestão de pedidos</h2>
+                <button class="text-xs text-gray-500 hover:text-gray-800 font-medium mt-1 flex items-center">
+                    <i class="fas fa-filter mr-1.5 text-gray-400"></i> Filtrar por Período
+                </button>
+            </div>
+            <button
+                class="bg-[#7B88E8] hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium transition text-sm shadow-sm flex items-center space-x-2">
+                <i class="fas fa-plus"></i> <span>Registrar novo pedido</span>
+            </button>
+        </div>
+
+        <div class="overflow-x-auto border border-gray-100 rounded-xl">
+            <table class="w-full text-left whitespace-nowrap">
+                <thead class="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100 tracking-wider">
+                    <tr>
+                        <th class="px-6 py-4 font-bold">Data Entrega Estimada</th>
+                        <th class="px-6 py-4 font-bold">Nome Cliente</th>
+                        <th class="px-6 py-4 font-bold">Detalhes Pedido</th>
+                        <th class="px-6 py-4 font-bold">Valor Pedido</th>
+                        <th class="px-6 py-4 font-bold text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 text-sm">
+                    {% set pedidos_demo = [
+                        {'id': 1, 'data_entrega': '28/05/2026', 'cliente': 'Maria Santos', 'avatar': 'MS', 'pedido': '2x Mini Vulcão, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Pendente'},
+                        {'id': 2, 'data_entrega': '17/05/2026', 'cliente': 'João Santos', 'avatar': 'JS', 'pedido': '50x Brigadeiro Gourmet, 1x Bolo de Pote', 'valor': 120.16, 'status': 'Entregue'},
+                        {'id': 3, 'data_entrega': '20/05/2026', 'cliente': 'Delicinhas do sul', 'avatar': 'DS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Pronto'},
+                        {'id': 4, 'data_entrega': '10/05/2026', 'cliente': 'Ana Lima', 'avatar': 'AL', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Atrasado'},
+                        {'id': 5, 'data_entrega': '25/05/2026', 'cliente': 'Maria Santos', 'avatar': 'MS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Entregue'},
+                        {'id': 6, 'data_entrega': '28/05/2026', 'cliente': 'João Santos', 'avatar': 'JS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Cancelado'},
+                        {'id': 7, 'data_entrega': '28/05/2026', 'cliente': 'Delicinhas do sul', 'avatar': 'DS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Recusado'},
+                        {'id': 8, 'data_entrega': '22/05/2026', 'cliente': 'Ana Lima', 'avatar': 'AL', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Entregue'}
+                    ] %}
+                    {% for p in pedidos_demo %}
+                    <tr class="hover:bg-gray-50/80 transition-colors">
+                        <td class="px-6 py-4 text-gray-600">
+                            <div class="flex items-center space-x-2">
+                                <i class="far fa-clock text-gray-400"></i>
+                                <span>{{ p.data_entrega }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-bold text-xs flex items-center justify-center">
+                                    {{ p.avatar }}
+                                </div>
+                                <span class="font-medium text-gray-900">{{ p.cliente }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">{{ p.pedido }}</td>
+                        <td class="px-6 py-4 font-bold text-gray-900">R$ {{ "%.2f"|format(p.valor)|replace('.', ',') }}</td>
+                        <td class="px-6 py-4 text-center">
+                            <select onchange="atualizarStatus({{ p.id }}, this.value)" class="border rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none cursor-pointer
+                                {% if p.status == 'Pronto' %} text-emerald-600 bg-emerald-50 border-emerald-200
+                                {% elif p.status == 'Atrasado' %} text-red-600 bg-red-50 border-red-200
+                                {% elif p.status == 'Entregue' %} text-emerald-700 bg-emerald-50 border-emerald-200
+                                {% elif p.status == 'Recusado' %} text-rose-600 bg-rose-50 border-rose-200
+                                {% elif p.status == 'Cancelado' %} text-gray-600 bg-gray-100 border-gray-200
+                                {% else %} text-amber-600 bg-amber-50 border-amber-200 {% endif %}">
+                                <option value="Pendente" {% if p.status=='Pendente' %}selected{% endif %}>Pendente</option>
+                                <option value="Pronto" {% if p.status=='Pronto' %}selected{% endif %}>Pronto</option>
+                                <option value="Entregue" {% if p.status=='Entregue' %}selected{% endif %}>Entregue</option>
+                                <option value="Atrasado" {% if p.status=='Atrasado' %}selected{% endif %}>Atrasado</option>
+                                <option value="Cancelado" {% if p.status=='Cancelado' %}selected{% endif %}>Cancelado</option>
+                                <option value="Recusado" {% if p.status=='Recusado' %}selected{% endif %}>Recusado</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        async function atualizarStatus(idPedido, novoStatus) {
+            await fetch('/api/pedidos/status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: idPedido, status: novoStatus })
+            });
+        }
+    </script>
+</body>
+
+</html>

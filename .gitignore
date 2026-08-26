@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+glace.db
+
 __pycache__/
 *.py[codz]
 *$py.class
