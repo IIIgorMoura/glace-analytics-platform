@@ -1,8 +1,6 @@
 # glace-analytics-platform
 
-Para garantir o pleno funcionamento do sistema ao baixar o repositório, utilize o comando à seguir:
-
+Ao baixar o repositório pela primeira vez em um novo dispositivo, faça o uso do seguinte comando no terminal:
 ```bash
-# Como instalar as dependências
 pip install -r requirements.txt
 ```
