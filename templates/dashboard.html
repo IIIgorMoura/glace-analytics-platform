@@ -88,7 +88,8 @@
                     <div class="flex items-center space-x-3">
                         <input type="checkbox"
                             class="rounded peer border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
-                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Confirmar pedido #4521 — Mini vulcão</span>
+                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Confirmar
+                            pedido #4521 — Mini vulcão</span>
                     </div>
                     <span class="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-md">URGENTE</span>
                 </div>
@@ -96,7 +97,8 @@
                     <div class="flex items-center space-x-3">
                         <input type="checkbox" checked
                             class="rounded peer border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
-                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Atualizar receita do Bolo de Morango</span>
+                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Atualizar
+                            receita do Bolo de Morango</span>
                     </div>
                 </div>
             </div>
@@ -219,7 +221,7 @@
             menu.classList.toggle('hidden');
         }
 
-        // 1. Gráfico de Linha (Desempenho Financeiro) com dados estáticos temporários para visualização durante o desenvolvimento
+        // 1. Gráfico de Linha (Desempenho Financeiro)
         Plotly.newPlot('graficoLinha', [
             { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [300, 340, 310, 370, 320, 420, 380, 440, 410, 430], name: 'Receita Total', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#10B981', width: 2 }, fillcolor: 'rgba(16, 185, 129, 0.1)' },
             { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [230, 245, 235, 260, 250, 275, 265, 285, 275, 290], name: 'Custos Fixos', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#F59E0B', width: 2 }, fillcolor: 'rgba(245, 158, 11, 0.1)' },
@@ -231,7 +233,7 @@
             yaxis: { gridcolor: '#F3F4F6' }
         }, { responsive: true });
 
-        // 2. Gráfico Donut (Com valor fixo e percentuais nas fatias)
+        // 2. Gráfico Donut
         const catLabels = {{ cat_labels | tojson }};
         const catValues = {{ cat_values | tojson }};
 
@@ -255,12 +257,12 @@
             }]
         }, { responsive: true });
 
-        // 3. Gráfico de Margem por Item do Cardápio (Puxado do Banco de Dados)
+        // 3. Gráfico de Margem por Item do Cardápio (Corrigido os seletores Jinja2)
         const dadosMargem = {
             nomes: {{ nomes_receitas | tojson }},
-        custo_pct: { { custo_pcts | tojson } },
-        margem_pct_v: { { margem_pcts | tojson } },
-        precos: { { precos_venda | tojson } }
+            custo_pct: {{ custo_pcts | tojson }},
+            margem_pct_v: {{ margem_pcts | tojson }},
+            precos: {{ precos_venda | tojson }}
         };
 
         const alturaMargem = Math.max(280, 38 * dadosMargem.nomes.length);
