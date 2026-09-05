@@ -11,7 +11,7 @@ def get_db_connection():
 def init_db():
     conn = get_db_connection()
     
-    # 1. Tabela Principal de Ingredientes (Agora com Custo Médio Nativo e sem GTIN)
+    # 1. Tabela Principal de Ingredientes
     conn.execute('''
         CREATE TABLE IF NOT EXISTS ingredientes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +34,7 @@ def init_db():
         )
     ''')
     
-    # Manter as tabelas de Receitas e Categorias intactas
+    # 3. Tabelas de Receitas e Categorias
     conn.execute('''
         CREATE TABLE IF NOT EXISTS categorias_receitas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,6 +63,7 @@ def init_db():
         )
     ''')
 
+    # 4. Histórico de Preços
     conn.execute('''
         CREATE TABLE IF NOT EXISTS historico_precos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,6 +71,31 @@ def init_db():
             preco_unitario REAL NOT NULL,
             data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (ingrediente_id) REFERENCES ingredientes (id) ON DELETE CASCADE
+        )
+    ''')
+
+    # 5. Tabela de Pedidos Unificada (COM data_entrega)
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS pedidos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cliente_nome TEXT,
+            data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            data_entrega TEXT,
+            status TEXT DEFAULT 'Pendente',
+            valor_total REAL NOT NULL DEFAULT 0
+        )
+    ''')
+    
+    # 6. Tabela de Itens do Pedido
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS itens_pedido (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pedido_id INTEGER,
+            receita_id INTEGER,
+            quantidade INTEGER NOT NULL,
+            preco_unitario REAL NOT NULL,
+            FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE CASCADE,
+            FOREIGN KEY (receita_id) REFERENCES receitas (id)
         )
     ''')
     
@@ -80,12 +106,12 @@ def init_db():
 from blueprints.ingredientes import ingredientes_bp
 from blueprints.pedidos import pedidos_bp
 from blueprints.receitas import receitas_bp
-from blueprints.dashboard import dashboard_bp  # <--- IMPORTADO AQUI
+from blueprints.dashboard import dashboard_bp 
 
 app.register_blueprint(ingredientes_bp)
 app.register_blueprint(pedidos_bp)
 app.register_blueprint(receitas_bp)
-app.register_blueprint(dashboard_bp)          # <--- REGISTRADO AQUI
+app.register_blueprint(dashboard_bp)
 
 if __name__ == '__main__':
     init_db()

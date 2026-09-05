@@ -12,7 +12,7 @@ def get_db_connection():
 def dashboard():
     conn = get_db_connection()
     
-    # 1. Dados para o Gráfico de Margem por Item (Terceiro Gráfico)
+    # 1. Dados para o Gráfico de Margem por Item
     receitas = conn.execute('''
         SELECT r.id, r.nome, r.preco_venda,
                COALESCE(SUM(ri.quantidade * COALESCE(i.custo_medio_base, 0)), 0) as custo_total
@@ -45,9 +45,27 @@ def dashboard():
         margem_pcts.append(round(m_pct_bounded, 1))
         precos_venda.append(preco)
 
-    # 2. Dados Estáticos Temporários para o Gráfico de Setores (Lucro por Categoria) para visualização durante desenvolvimento
+    # 2. Dados Estáticos Temporários para o Gráfico de Setores
     cat_labels = ['Bolos Mini Vulcão', 'Bolos de Pote', 'Combos de Aniversário', 'Doces Gourmet', 'Brownies']
     cat_values = [42.0, 28.5, 15.0, 8.2, 6.3]
+
+    # 3. Puxando dados reais dos Pedidos para os Cards
+    try:
+        pedidos_hoje = conn.execute('''
+            SELECT COUNT(*) as total 
+            FROM pedidos 
+            WHERE date(data_pedido) = date('now', 'localtime')
+        ''').fetchone()['total']
+        
+        receita_total = conn.execute('''
+            SELECT SUM(valor_total) as receita 
+            FROM pedidos 
+            WHERE status NOT IN ('Cancelado', 'Recusado')
+        ''').fetchone()['receita'] or 0.0
+    except sqlite3.OperationalError:
+        # Evita que a tela quebre caso a tabela 'pedidos' ainda não exista
+        pedidos_hoje = 0
+        receita_total = 0.0
 
     conn.close()
     
@@ -58,4 +76,6 @@ def dashboard():
                            margem_pcts=margem_pcts,
                            precos_venda=precos_venda,
                            cat_labels=cat_labels,
-                           cat_values=cat_values)
+                           cat_values=cat_values,
+                           pedidos_hoje=pedidos_hoje,
+                           receita_total=receita_total)

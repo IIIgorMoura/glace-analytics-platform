@@ -11,48 +11,35 @@
 
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-    <header
-        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
+    <header class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
         <div class="flex items-center space-x-2 md:space-x-3 ml-2">
-            <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo"
-                class="w-8 h-8 md:w-10 md:h-10">
+            <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo" class="w-8 h-8 md:w-10 md:h-10">
             <h1 class="text-xl md:text-2xl font-bold tracking-widest text-[#E052A0]">GLACE</h1>
         </div>
 
         <nav class="hidden md:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217]">
-            <a href="/dashboard"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
-            <a href="/pedidos"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
-            <a href="/"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
-            <a href="/receitas"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
+            <a href="/dashboard" class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
+            <a href="/pedidos" class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
+            <a href="/" class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
+            <a href="/receitas" class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
         </nav>
 
         <div class="flex items-center space-x-2 mr-2 md:mr-4">
-            <button onclick="toggleMobileMenu()"
-                class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
+            <button onclick="toggleMobileMenu()" class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
                 <i class="fas fa-bars text-sm"></i>
             </button>
 
-            <button
-                class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
+            <button class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
                 <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Sair</span>
             </button>
         </div>
     </header>
 
-    <div id="mobileMenu"
-        class="hidden md:hidden mx-2 md:mx-4 mt-2 bg-[#121217] border border-gray-800 rounded-xl p-3 space-y-1 shadow-lg z-50">
-        <a href="/dashboard"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Dashboard</a>
-        <a href="/pedidos"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Pedidos</a>
-        <a href="/"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
-        <a href="/receitas"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
+    <div id="mobileMenu" class="hidden md:hidden mx-2 md:mx-4 mt-2 bg-[#121217] border border-gray-800 rounded-xl p-3 space-y-1 shadow-lg z-50">
+        <a href="/dashboard" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Dashboard</a>
+        <a href="/pedidos" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Pedidos</a>
+        <a href="/" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
+        <a href="/receitas" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
     </div>
 
     <main class="p-4 md:p-8 max-w-7xl mx-auto bg-white mt-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
@@ -64,8 +51,7 @@
                     <i class="fas fa-filter mr-1.5 text-gray-400"></i> Filtrar por Período
                 </button>
             </div>
-            <button
-                class="bg-[#7B88E8] hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium transition text-sm shadow-sm flex items-center space-x-2">
+            <button onclick="abrirModalPedido()" class="bg-[#7B88E8] hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium transition text-sm shadow-sm flex items-center space-x-2">
                 <i class="fas fa-plus"></i> <span>Registrar novo pedido</span>
             </button>
         </div>
@@ -82,49 +68,51 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50 text-sm">
-                    {% set pedidos_demo = [
-                        {'id': 1, 'data_entrega': '28/05/2026', 'cliente': 'Maria Santos', 'avatar': 'MS', 'pedido': '2x Mini Vulcão, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Pendente'},
-                        {'id': 2, 'data_entrega': '17/05/2026', 'cliente': 'João Santos', 'avatar': 'JS', 'pedido': '50x Brigadeiro Gourmet, 1x Bolo de Pote', 'valor': 120.16, 'status': 'Entregue'},
-                        {'id': 3, 'data_entrega': '20/05/2026', 'cliente': 'Delicinhas do sul', 'avatar': 'DS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Pronto'},
-                        {'id': 4, 'data_entrega': '10/05/2026', 'cliente': 'Ana Lima', 'avatar': 'AL', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Atrasado'},
-                        {'id': 5, 'data_entrega': '25/05/2026', 'cliente': 'Maria Santos', 'avatar': 'MS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Entregue'},
-                        {'id': 6, 'data_entrega': '28/05/2026', 'cliente': 'João Santos', 'avatar': 'JS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Cancelado'},
-                        {'id': 7, 'data_entrega': '28/05/2026', 'cliente': 'Delicinhas do sul', 'avatar': 'DS', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Recusado'},
-                        {'id': 8, 'data_entrega': '22/05/2026', 'cliente': 'Ana Lima', 'avatar': 'AL', 'pedido': '2x Pão bolo cascata, 1x Brigadeiro, 2x Bombom', 'valor': 102.90, 'status': 'Entregue'}
-                    ] %}
-                    {% for p in pedidos_demo %}
+                    {% for p in pedidos %}
                     <tr class="hover:bg-gray-50/80 transition-colors">
                         <td class="px-6 py-4 text-gray-600">
                             <div class="flex items-center space-x-2">
-                                <i class="far fa-clock text-gray-400"></i>
-                                <span>{{ p.data_entrega }}</span>
+                                <i class="far fa-calendar-alt text-gray-400"></i>
+                                <span>{{ p.data_entrega if p.data_entrega else p.data_pedido[:10] }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-3">
                                 <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-bold text-xs flex items-center justify-center">
-                                    {{ p.avatar }}
+                                    {{ p.cliente_nome[:2] | upper }}
                                 </div>
-                                <span class="font-medium text-gray-900">{{ p.cliente }}</span>
+                                <span class="font-medium text-gray-900">{{ p.cliente_nome }}</span>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-gray-600">{{ p.pedido }}</td>
-                        <td class="px-6 py-4 font-bold text-gray-900">R$ {{ "%.2f"|format(p.valor)|replace('.', ',') }}</td>
-                        <td class="px-6 py-4 text-center">
-                            <select onchange="atualizarStatus({{ p.id }}, this.value)" class="border rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none cursor-pointer
-                                {% if p.status == 'Pronto' %} text-emerald-600 bg-emerald-50 border-emerald-200
-                                {% elif p.status == 'Atrasado' %} text-red-600 bg-red-50 border-red-200
-                                {% elif p.status == 'Entregue' %} text-emerald-700 bg-emerald-50 border-emerald-200
-                                {% elif p.status == 'Recusado' %} text-rose-600 bg-rose-50 border-rose-200
-                                {% elif p.status == 'Cancelado' %} text-gray-600 bg-gray-100 border-gray-200
-                                {% else %} text-amber-600 bg-amber-50 border-amber-200 {% endif %}">
-                                <option value="Pendente" {% if p.status=='Pendente' %}selected{% endif %}>Pendente</option>
-                                <option value="Pronto" {% if p.status=='Pronto' %}selected{% endif %}>Pronto</option>
-                                <option value="Entregue" {% if p.status=='Entregue' %}selected{% endif %}>Entregue</option>
-                                <option value="Atrasado" {% if p.status=='Atrasado' %}selected{% endif %}>Atrasado</option>
-                                <option value="Cancelado" {% if p.status=='Cancelado' %}selected{% endif %}>Cancelado</option>
-                                <option value="Recusado" {% if p.status=='Recusado' %}selected{% endif %}>Recusado</option>
-                            </select>
+                        <td class="px-6 py-4 text-gray-500 text-sm">
+                            <div class="max-w-[150px] sm:max-w-[250px] truncate" title="{{ p.itens_nomes }}">
+                                {{ p.itens_nomes if p.itens_nomes else 'Nenhum item' }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 font-bold text-gray-900">R$ {{ "%.2f"|format(p.valor_total)|replace('.', ',') }}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-center space-x-3">
+                                <select onchange="atualizarStatus(this, {{ p.id }}, this.value)" data-status="{{ p.status }}" 
+                                        class="status-select border rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none cursor-pointer transition-all duration-300">
+                                    <option value="Pendente" {% if p.status == 'Pendente' %}selected{% endif %}>Pendente</option>
+                                    <option value="Pronto" {% if p.status == 'Pronto' %}selected{% endif %}>Pronto</option>
+                                    <option value="Entregue" {% if p.status == 'Entregue' %}selected{% endif %}>Entregue</option>
+                                    <option value="Atrasado" {% if p.status == 'Atrasado' %}selected{% endif %}>Atrasado</option>
+                                    <option value="Cancelado" {% if p.status == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                                    <option value="Recusado" {% if p.status == 'Recusado' %}selected{% endif %}>Recusado</option>
+                                    <option value="Finalizado" {% if p.status == 'Finalizado' %}selected{% endif %}>Finalizado</option>
+                                </select>
+                                
+                                <button onclick="abrirModalEditar({{ p.id }})" title="Detalhes e Edição" class="text-gray-400 hover:text-[#7B88E8] transition-colors p-2 rounded-lg hover:bg-indigo-50">
+                                    <i class="fas fa-edit text-sm"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-400">
+                            Nenhum pedido registrado ainda.
                         </td>
                     </tr>
                     {% endfor %}
@@ -133,18 +121,247 @@
         </div>
     </main>
 
+    <!-- Modal Novo/Editar Pedido -->
+    <div id="modalNovoPedido" class="hidden fixed inset-0 bg-gray-900/60 z-[100] flex items-center justify-center backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-full">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h3 class="text-lg font-bold text-gray-900">Registrar Novo Pedido</h3>
+                <button onclick="fecharModalPedido()" class="text-gray-400 hover:text-gray-700 transition"><i class="fas fa-times text-lg"></i></button>
+            </div>
+
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Nome do Cliente</label>
+                        <input type="text" id="clienteNome" class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-[#7B88E8] focus:border-[#7B88E8] outline-none transition" placeholder="Ex: Maria Silva">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Data de Entrega</label>
+                        <input type="date" id="dataEntrega" class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-[#7B88E8] focus:border-[#7B88E8] outline-none transition">
+                    </div>
+                </div>
+
+                <div class="mb-4 flex justify-between items-end">
+                    <label class="block text-xs font-bold text-gray-600 uppercase">Itens do Pedido</label>
+                    <button onclick="adicionarLinhaItem()" class="text-xs font-bold text-[#7B88E8] hover:text-indigo-700 flex items-center"><i class="fas fa-plus mr-1"></i> Adicionar Item</button>
+                </div>
+
+                <div id="containerItens" class="space-y-3">
+                    <!-- Linhas de itens injetadas via JavaScript -->
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center">
+                    <span class="font-medium text-gray-500">Valor Total Estimado:</span>
+                    <span id="valorTotalPedido" class="text-2xl font-extrabold text-gray-900">R$ 0,00</span>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                <div>
+                    <button id="btnExcluirPedido" onclick="excluirPedido()" class="hidden px-4 py-2 rounded-xl text-sm font-bold text-red-500 hover:text-red-700 hover:bg-red-50 transition flex items-center">
+                        <i class="fas fa-trash-alt mr-2"></i> Excluir Pedido
+                    </button>
+                </div>
+
+                <div class="flex space-x-3 ml-auto">
+                    <button onclick="fecharModalPedido()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-200 transition">Cancelar</button>
+                    <button onclick="salvarPedido()" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-[#7B88E8] text-white hover:bg-indigo-600 shadow-sm transition">Salvar Pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+        const receitasDisponiveis = {{ receitas | tojson }};
+        let pedidoIdEditando = null; 
+
+        const coresStatus = {
+            'Pendente': 'text-amber-600 bg-amber-50 border-amber-200',
+            'Pronto': 'text-sky-600 bg-sky-50 border-sky-200',
+            'Entregue': 'text-emerald-700 bg-emerald-50 border-emerald-200',
+            'Atrasado': 'text-red-600 bg-red-50 border-red-200',
+            'Cancelado': 'text-rose-600 bg-rose-50 border-rose-200',
+            'Recusado': 'text-rose-600 bg-rose-50 border-rose-200',
+            'Finalizado': 'text-gray-400 bg-gray-100 border-gray-200 opacity-60' 
+        };
+
+        document.addEventListener('DOMContentLoaded', aplicarCoresStatus);
+
+        function aplicarCoresStatus() {
+            document.querySelectorAll('.status-select').forEach(select => {
+                Object.values(coresStatus).forEach(classes => select.classList.remove(...classes.split(' ')));
+                const status = select.value;
+                const classesAdd = coresStatus[status] || coresStatus['Pendente'];
+                select.classList.add(...classesAdd.split(' '));
+            });
         }
 
-        async function atualizarStatus(idPedido, novoStatus) {
-            await fetch('/api/pedidos/status', {
+        async function atualizarStatus(selectElement, id, novoStatus) {
+            const originalStatus = selectElement.getAttribute('data-status');
+
+            const response = await fetch('/api/pedidos/status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: idPedido, status: novoStatus })
+                body: JSON.stringify({ id: id, status: novoStatus })
             });
+
+            if (response.ok) {
+                selectElement.setAttribute('data-status', novoStatus);
+                aplicarCoresStatus(); 
+            } else {
+                alert('Erro ao atualizar status.');
+                selectElement.value = originalStatus; 
+                aplicarCoresStatus();
+            }
+        }
+
+        function abrirModalPedido() {
+            pedidoIdEditando = null;
+            document.querySelector('#modalNovoPedido h3').innerText = 'Registrar Novo Pedido';
+            document.getElementById('modalNovoPedido').classList.remove('hidden');
+            
+            document.getElementById('btnExcluirPedido').classList.add('hidden');
+            
+            document.getElementById('containerItens').innerHTML = '';
+            document.getElementById('clienteNome').value = '';
+            document.getElementById('dataEntrega').value = '';
+            adicionarLinhaItem();
+            calcularTotal();
+        }
+
+        async function abrirModalEditar(id) {
+            pedidoIdEditando = id;
+            document.querySelector('#modalNovoPedido h3').innerText = 'Detalhes e Edição do Pedido #' + id;
+            
+            document.getElementById('btnExcluirPedido').classList.remove('hidden');
+            
+            document.getElementById('containerItens').innerHTML = ''; 
+
+            const response = await fetch(`/api/pedidos/${id}`);
+            if (response.ok) {
+                const pedido = await response.json();
+                document.getElementById('clienteNome').value = pedido.cliente_nome;
+                document.getElementById('dataEntrega').value = pedido.data_entrega || '';
+
+                if (pedido.itens && pedido.itens.length > 0) {
+                    pedido.itens.forEach(item => adicionarLinhaItem(item.receita_id, item.quantidade));
+                } else {
+                    adicionarLinhaItem();
+                }
+
+                calcularTotal();
+                document.getElementById('modalNovoPedido').classList.remove('hidden');
+            } else {
+                alert('Erro ao carregar detalhes do pedido.');
+            }
+        }
+
+        function fecharModalPedido() {
+            document.getElementById('modalNovoPedido').classList.add('hidden');
+        }
+
+        function adicionarLinhaItem(receita_id = '', quantidade = 1) {
+            const container = document.getElementById('containerItens');
+            const divId = 'item-' + Date.now();
+
+            let optionsHtml = '<option value="">Selecione uma receita...</option>';
+            receitasDisponiveis.forEach(r => {
+                const selected = r.id == receita_id ? 'selected' : '';
+                optionsHtml += `<option value="${r.id}" data-preco="${r.preco_venda || 0}" ${selected}>${r.nome} - R$ ${(r.preco_venda || 0).toFixed(2)}</option>`;
+            });
+
+            const html = `
+                <div id="${divId}" class="flex items-center space-x-2 bg-gray-50 p-2 rounded-xl border border-gray-100 linha-item transition-all">
+                    <div class="flex-1">
+                        <select class="select-receita w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#7B88E8]" onchange="calcularTotal()">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                    <div class="w-24">
+                        <input type="number" min="1" value="${quantidade}" class="input-qtd w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none text-center focus:border-[#7B88E8]" onchange="calcularTotal()">
+                    </div>
+                    <button onclick="removerLinhaItem('${divId}')" class="w-10 h-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function removerLinhaItem(id) {
+            document.getElementById(id).remove();
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let total = 0;
+            const linhas = document.querySelectorAll('.linha-item');
+            linhas.forEach(linha => {
+                const select = linha.querySelector('.select-receita');
+                const qtd = linha.querySelector('.input-qtd').value;
+                if (select.selectedIndex > 0) {
+                    const preco = parseFloat(select.options[select.selectedIndex].getAttribute('data-preco'));
+                    total += preco * (parseInt(qtd) || 1);
+                }
+            });
+            document.getElementById('valorTotalPedido').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+        }
+
+        async function salvarPedido() {
+            const cliente_nome = document.getElementById('clienteNome').value;
+            const data_entrega = document.getElementById('dataEntrega').value;
+            const linhas = document.querySelectorAll('.linha-item');
+            const itens = [];
+
+            if (!cliente_nome || !data_entrega) {
+                alert('Preencha o nome do cliente e a data de entrega.'); return;
+            }
+
+            linhas.forEach(linha => {
+                const select = linha.querySelector('.select-receita');
+                const quantidade = parseInt(linha.querySelector('.input-qtd').value);
+                if (select.value) {
+                    itens.push({
+                        receita_id: parseInt(select.value),
+                        quantidade: quantidade,
+                        preco_unitario: parseFloat(select.options[select.selectedIndex].getAttribute('data-preco'))
+                    });
+                }
+            });
+
+            if (itens.length === 0) {
+                alert('Adicione pelo menos um item ao pedido.'); return;
+            }
+
+            const endpoint = pedidoIdEditando ? `/api/pedidos/${pedidoIdEditando}/editar` : '/api/pedidos/novo';
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cliente_nome, data_entrega, itens })
+            });
+
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Erro ao salvar o pedido.');
+            }
+        }
+
+        async function excluirPedido() {
+            if (!pedidoIdEditando) return;
+            
+            if (confirm('Tem certeza que deseja excluir este pedido inteiramente? Esta ação não pode ser desfeita.')) {
+                const response = await fetch(`/api/pedidos/${pedidoIdEditando}/excluir`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Erro ao excluir o pedido. Verifique o servidor.');
+                }
+            }
         }
     </script>
 </body>
