@@ -77,24 +77,28 @@
                 <div class="p-3.5 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <input type="checkbox"
-                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
-                        <span class="text-gray-700">Verificar estoque de farinha — abaixo do mínimo</span>
+                            class="peer rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
+                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">
+                            Verificar estoque de farinha — abaixo do mínimo
+                        </span>
                     </div>
                     <span class="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-md">URGENTE</span>
                 </div>
                 <div class="p-3.5 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <input type="checkbox"
-                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
-                        <span class="text-gray-700">Confirmar pedido #4521 — Mini vulcão</span>
+                            class="rounded peer border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
+                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Confirmar
+                            pedido #4521 — Mini vulcão</span>
                     </div>
                     <span class="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-md">URGENTE</span>
                 </div>
                 <div class="p-3.5 flex items-center justify-between bg-gray-50/50">
                     <div class="flex items-center space-x-3">
                         <input type="checkbox" checked
-                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
-                        <span class="text-gray-400 line-through">Atualizar receita do Bolo de Morango</span>
+                            class="rounded peer border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
+                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Atualizar
+                            receita do Bolo de Morango</span>
                     </div>
                 </div>
             </div>
@@ -217,7 +221,7 @@
             menu.classList.toggle('hidden');
         }
 
-        // 1. Gráfico de Linha (Desempenho Financeiro) com dados estáticos temporários para visualização durante o desenvolvimento
+        // 1. Gráfico de Linha (Desempenho Financeiro)
         Plotly.newPlot('graficoLinha', [
             { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [300, 340, 310, 370, 320, 420, 380, 440, 410, 430], name: 'Receita Total', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#10B981', width: 2 }, fillcolor: 'rgba(16, 185, 129, 0.1)' },
             { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [230, 245, 235, 260, 250, 275, 265, 285, 275, 290], name: 'Custos Fixos', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#F59E0B', width: 2 }, fillcolor: 'rgba(245, 158, 11, 0.1)' },
@@ -229,7 +233,7 @@
             yaxis: { gridcolor: '#F3F4F6' }
         }, { responsive: true });
 
-        // 2. Gráfico Donut (Com valor fixo e percentuais nas fatias)
+        // 2. Gráfico Donut
         const catLabels = {{ cat_labels | tojson }};
         const catValues = {{ cat_values | tojson }};
 
@@ -253,7 +257,7 @@
             }]
         }, { responsive: true });
 
-        // 3. Gráfico de Margem por Item do Cardápio (Puxado do Banco de Dados)
+        // 3. Gráfico de Margem por Item do Cardápio (Corrigido os seletores Jinja2)
         const dadosMargem = {
             nomes: {{ nomes_receitas | tojson }},
             custo_pct: {{ custo_pcts | tojson }},
@@ -266,24 +270,24 @@
         if (dadosMargem.nomes.length > 0) {
             Plotly.newPlot('chart-margem', [
                 {
-                    y: dadosMargem.nomes, x: dadosMargem.custo_pct, name: 'Custo dos Insumos (CMV)', 
+                    y: dadosMargem.nomes, x: dadosMargem.custo_pct, name: 'Custo dos Insumos (CMV)',
                     type: 'bar', orientation: 'h', marker: { color: '#E5484D' },
                     text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textfont: { color: 'white', size: 10 }
                 },
                 {
-                    y: dadosMargem.nomes, x: dadosMargem.margem_pct_v, name: 'Margem de Lucro Bruta', 
+                    y: dadosMargem.nomes, x: dadosMargem.margem_pct_v, name: 'Margem de Lucro Bruta',
                     type: 'bar', orientation: 'h', marker: { color: '#1F9D6E' },
                     text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textfont: { color: 'white', size: 10 }
                 }
             ], {
-                barmode: 'stack', 
-                height: alturaMargem, 
+                barmode: 'stack',
+                height: alturaMargem,
                 margin: { l: 140, r: 70, t: 10, b: 35 },
                 yaxis: { type: 'category' },
                 xaxis: { title: '% do Preço de Venda', ticksuffix: '%', range: [0, 100] },
                 legend: { orientation: 'h', y: 1.15, x: 0, font: { size: 11 } },
-                font: { family: 'Inter, sans-serif' }, 
-                plot_bgcolor: 'white', 
+                font: { family: 'Inter, sans-serif' },
+                plot_bgcolor: 'white',
                 paper_bgcolor: 'white',
                 annotations: dadosMargem.nomes.map((n, i) => ({
                     x: 103, y: n, text: 'R$ ' + dadosMargem.precos[i].toFixed(2), showarrow: false, xanchor: 'left',

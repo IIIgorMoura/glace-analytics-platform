@@ -1,3 +1,80 @@
 # glace-analytics-platform
 
-# EU ESTIVE AQUI
+Ao baixar o repositório pela primeira vez em um novo dispositivo, faça o uso do seguinte comando no terminal:
+```bash
+pip install -r requirements.txt
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AQUI E AGORA
+(HERE AND NOW)
