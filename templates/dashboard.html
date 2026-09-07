@@ -13,26 +13,29 @@
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
 
     <header
-        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
+        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md overflow-hidden">
 
+        <!-- Logo -->
         <div class="flex items-center space-x-2 md:space-x-3 ml-2 shrink-0">
             <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo"
                 class="w-8 h-8 md:w-10 md:h-10">
             <h1 class="text-xl md:text-2xl font-bold tracking-widest text-[#E052A0]">GLACE</h1>
         </div>
 
-        <nav class="hidden md:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217]">
+        <!-- Menu de Navegação Central (Adaptável) -->
+        <nav class="hidden lg:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217] shrink">
             <a href="/dashboard"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
+                class="px-4 py-2 rounded-full transition text-xs xl:text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
             <a href="/pedidos"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
+                class="px-4 py-2 rounded-full transition text-xs xl:text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Pedidos</a>
             <a href="/"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
+                class="px-4 py-2 rounded-full transition text-xs xl:text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Ingredientes</a>
             <a href="/receitas"
-                class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
+                class="px-4 py-2 rounded-full transition text-xs xl:text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
         </nav>
 
-        <div class="flex items-center space-x-2 mr-2">
+        <!-- Ações à Direita -->
+        <div class="flex items-center space-x-2 mr-2 shrink-0">
             
             <button onclick="openFecharMesModal()"
                 class="bg-[#E052A0] hover:bg-[#c9418b] text-white font-semibold px-3 py-2 rounded-lg text-xs md:text-sm transition flex items-center space-x-1 md:space-x-2 shadow-lg shadow-[#E052A0]/20 cursor-pointer">
@@ -41,8 +44,9 @@
                 <span class="sm:hidden">Custos</span>
             </button>
 
+            <!-- Botão Hambúrguer (Aparece em telas menores que LG para englobar o menu) -->
             <button onclick="toggleMobileMenu()"
-                class="md:hidden border border-gray-700 p-2 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center shrink-0">
+                class="lg:hidden border border-gray-700 p-2 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center shrink-0">
                 <i class="fas fa-bars text-sm"></i>
             </button>
 
@@ -55,23 +59,18 @@
 
     <div id="mobileMenu"
         class="hidden md:hidden mx-2 md:mx-4 mt-2 bg-[#121217] border border-gray-800 rounded-xl p-3 space-y-1 shadow-lg z-50">
-        <a href="/dashboard"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Dashboard</a>
-        <a href="/pedidos"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'pedidos' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Pedidos</a>
-        <a href="/"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
-        <a href="/receitas"
-            class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
-        <button
-            class="w-full text-left flex items-center px-4 py-2.5 rounded-lg transition text-sm font-medium text-gray-400 hover:text-white hover:bg-[#0D0D11]/50 mt-2 border-t border-gray-800 pt-3">
+        <a href="/dashboard" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium border border-[#E052A0] text-white bg-[#0D0D11]">Dashboard</a>
+        <a href="/pedidos" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium text-gray-400 hover:text-white hover:bg-[#0D0D11]/50">Pedidos</a>
+        <a href="/" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium text-gray-400 hover:text-white hover:bg-[#0D0D11]/50">Ingredientes</a>
+        <a href="/receitas" class="block px-4 py-2.5 rounded-lg transition text-sm font-medium text-gray-400 hover:text-white hover:bg-[#0D0D11]/50">Receitas</a>
+        <button class="w-full text-left flex items-center px-4 py-2.5 rounded-lg transition text-sm font-medium text-gray-400 hover:text-white hover:bg-[#0D0D11]/50 mt-2 border-t border-gray-800 pt-3">
             <i class="fas fa-sign-out-alt mr-2"></i> Sair
         </button>
     </div>
 
     <main class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 mb-8">
 
-        <!-- PAINEL DE ALERTAS DINÂMICO -->
+        <!-- PAINEL DE ALERTAS -->
         <div class="bg-[#EBF5FF] border border-[#BFDBFE] rounded-2xl p-5 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                 <div class="flex items-center space-x-3">
@@ -96,7 +95,6 @@
                     Tudo tranquilo por aqui! Nenhuma tarefa urgente no momento.
                 </div>
                 {% else %}
-                    <!-- Renderiza no máximo os 3 primeiros alertas -->
                     {% for alerta in alertas[:3] %}
                     <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
                         <div class="flex items-center space-x-3">
@@ -114,87 +112,78 @@
             </div>
         </div>
 
+        <!-- 4 KPI CARDS ATUALIZADOS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
                 <div class="flex justify-between items-start">
-                    <div class="w-10 h-10 rounded-xl bg-pink-50 text-[#E052A0] flex items-center justify-center"><i
-                            class="fas fa-chart-line"></i></div>
-                    <span class="bg-emerald-50 text-emerald-600 text-[11px] font-bold px-2.5 py-1 rounded-full">Em
-                        alta</span>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fas fa-dollar-sign"></i></div>
                 </div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Margem de Lucro Média</p>
-                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">24%</h3>
-                <p class="text-xs text-emerald-600 font-medium mt-2"><i class="fas fa-caret-up"></i> 2.1% vs. mês
-                    anterior</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Lucro Bruto</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">R$ {{ "%.2f"|format(lucro_bruto)|replace('.', ',') }}</h3>
+                <p class="text-xs text-gray-500 font-medium mt-2">Pedidos Entregues</p>
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
                 <div class="flex justify-between items-start">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i
-                            class="fas fa-dollar-sign"></i></div>
-                    <span class="bg-emerald-50 text-emerald-600 text-[11px] font-bold px-2.5 py-1 rounded-full">Em
-                        alta</span>
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center"><i class="fas fa-clock"></i></div>
                 </div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Receita Prevista</p>
-                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">R$ 12.200</h3>
-                <p class="text-xs text-emerald-600 font-medium mt-2"><i class="fas fa-caret-up"></i> 8.4% vs. mês
-                    anterior</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Pedidos Pendentes</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">{{ pedidos_pendentes }}</h3>
+                <p class="text-xs text-gray-500 font-medium mt-2">Aguardando produção</p>
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
                 <div class="flex justify-between items-start">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i
-                            class="fas fa-shopping-cart"></i></div>
-                    <span class="bg-emerald-50 text-emerald-600 text-[11px] font-bold px-2.5 py-1 rounded-full">Em
-                        alta</span>
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fas fa-chart-line"></i></div>
                 </div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Pedidos Hoje</p>
-                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">{{ pedidos_hoje }}</h3>
-                <p class="text-xs text-gray-500 font-medium mt-2">Registrados hoje</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Margem Média</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">{{ "%.1f"|format(margem_lucro_media) }}%</h3>
+                <p class="text-xs text-gray-500 font-medium mt-2">Baseado nas vendas</p>
             </div>
 
-            <div
-                class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden border-l-4 border-l-amber-400">
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
                 <div class="flex justify-between items-start">
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center"><i
-                            class="fas fa-boxes"></i></div>
-                    <span
-                        class="bg-amber-50 text-amber-600 text-[11px] font-bold px-2.5 py-1 rounded-full">Atenção</span>
+                    <div class="w-10 h-10 rounded-xl bg-pink-50 text-[#E052A0] flex items-center justify-center"><i class="fas fa-shopping-basket"></i></div>
+                    {% if gasto_estimado > 0 %}
+                    <span class="bg-amber-50 text-amber-600 text-[11px] font-bold px-2.5 py-1 rounded-full">Atenção</span>
+                    {% endif %}
                 </div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Itens em Alerta</p>
-                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">{{ qtd_alertas }}</h3>
-                <p class="text-xs text-amber-600 font-medium mt-2"><i class="fas fa-exclamation-circle"></i> Tarefas pendentes</p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Previsão de Compras</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">R$ {{ "%.2f"|format(gasto_estimado)|replace('.', ',') }}</h3>
+                <p class="text-xs text-pink-600 font-medium mt-2"><i class="fas fa-exclamation-circle"></i> Reposição de insumos</p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+            
+            <!-- Gráfico de Linha de Desempenho -->
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm lg:col-span-2">
                 <div class="flex justify-between items-center mb-4">
                     <div>
                         <h3 class="font-bold text-lg text-gray-900">Desempenho Financeiro</h3>
+                        <!-- Sublegenda removida -->
                     </div>
                 </div>
                 <div id="graficoLinha" class="w-full h-80"></div>
             </div>
 
+            <!-- Gráfico de Rosca de Receitas Mais Vendidas -->
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-lg text-gray-900">Receita por Categoria</h3> 
-                    <p class="text-xs text-gray-400">Itens mais vendidos</p>
+                    <h3 class="font-bold text-lg text-gray-900">Receitas Mais Vendidas</h3> 
+                    <p class="text-xs text-gray-400">Itens que geram mais faturamento</p>
                 </div>
                 <div id="graficoDoughnut" class="w-full h-64 my-auto"></div>
-                <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-gray-100">
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-[#E052A0]"></span><span class="text-gray-600 font-medium">Bolos Mini Vulcão</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-pink-400"></span><span class="text-gray-600 font-medium">Bolos de Pote</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-pink-300"></span><span class="text-gray-600 font-medium">Combos Festa</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-purple-300"></span><span class="text-gray-600 font-medium">Doces Gourmet</span></div>
+                <!-- Legenda populada dinamicamente via JS -->
+                <div id="doughnut-legend" class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-gray-100">
                 </div>
             </div>
         </div>
 
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h3 class="font-bold text-lg text-gray-900">Margem de Lucro por Item do Cardápio</h3>
-            <p class="text-xs text-gray-400 mb-4">Cada barra = 100% do preço de venda · vermelho = CMPM (custo de insumos) · verde = margem de lucro bruta</p>
+            <p class="text-xs text-gray-400 mb-4">Cada barra = 100% do preço de venda · vermelho = CMPM (Custo de Insumos) · verde = margem de lucro bruta</p>
             <div id="chart-margem" class="w-full"></div>
             <p class="text-xs text-gray-500 mt-3 font-medium" id="legenda-margem"></p>
         </div>
@@ -251,86 +240,99 @@
     </div>
 </div>
 
-<!-- MODAL CUSTOS OPERACIONAIS -->
+<!-- MODAL CUSTOS OPERACIONAIS EXPANDIDO -->
 <div id="modalFecharMes" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-5 max-h-[90vh] flex flex-col">
+    <div class="bg-white rounded-2xl max-w-4xl w-full p-0 shadow-2xl relative flex overflow-hidden max-h-[90vh]">
         
-        <div class="flex justify-between items-center border-b border-gray-100 pb-3 shrink-0">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-pink-50 text-[#E052A0] flex items-center justify-center font-bold">
-                    <i class="fas fa-calculator text-base"></i>
+        <!-- Lado Esquerdo: Formulário -->
+        <div class="w-full md:w-2/3 p-6 flex flex-col border-r border-gray-100 bg-white">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-3 shrink-0 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-pink-50 text-[#E052A0] flex items-center justify-center font-bold">
+                        <i class="fas fa-calculator text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900">Custos Operacionais</h3>
+                    </div>
                 </div>
+                <button onclick="closeFecharMesModal()" type="button" class="md:hidden text-gray-400 hover:text-gray-600 transition p-1">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+
+            <form id="formFecharMes" onsubmit="salvarFechamentoMes(event)" class="space-y-4 overflow-y-auto pr-1 flex-1">
                 <div>
-                    <h3 class="text-base font-bold text-gray-900">Custos operacionais</h3>
-                </div>
-            </div>
-            <button onclick="closeFecharMesModal()" type="button" class="text-gray-400 hover:text-gray-600 transition p-1">
-                <i class="fas fa-times text-base"></i>
-            </button>
-        </div>
-
-        <form id="formFecharMes" onsubmit="salvarFechamentoMes(event)" class="space-y-4 overflow-y-auto pr-1">
-            <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                    Mês de Referência <span class="text-red-500">*</span>
-                </label>
-                <input type="month" required id="mesReferencia"
-                    class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#E052A0] focus:border-[#E052A0] outline-none text-gray-800 transition">
-            </div>
-
-            <div class="pt-2 space-y-3">
-                <div class="flex justify-between items-center">
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
-                        Custos Operacionais
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                        Mês de Referência <span class="text-red-500">*</span>
                     </label>
-                    <div class="flex space-x-3 text-xs font-bold">
-                        <button type="button" onclick="toggleBoxNovaCategoria(true)"
-                            class="text-gray-500 hover:text-[#E052A0] transition flex items-center space-x-1 cursor-pointer">
-                            <i class="fas fa-folder-plus text-[10px]"></i>
-                            <span>Nova Categoria</span>
-                        </button>
-                        <button type="button" onclick="adicionarLinhaCusto()"
-                            class="text-[#E052A0] hover:text-[#c9418b] transition flex items-center space-x-1 cursor-pointer">
-                            <i class="fas fa-plus text-[10px]"></i>
-                            <span>Adicionar Custo</span>
-                        </button>
+                    <input type="month" required id="mesReferencia"
+                        class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#E052A0] focus:border-[#E052A0] outline-none text-gray-800 transition">
+                </div>
+
+                <div class="pt-2 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                            Lista de Custos
+                        </label>
+                        <div class="flex space-x-3 text-xs font-bold">
+                            <button type="button" onclick="toggleBoxNovaCategoria(true)"
+                                class="text-gray-500 hover:text-[#E052A0] transition flex items-center space-x-1 cursor-pointer">
+                                <i class="fas fa-folder-plus text-[10px]"></i>
+                                <span>Nova Categoria</span>
+                            </button>
+                            <button type="button" onclick="adicionarLinhaCusto()"
+                                class="text-[#E052A0] hover:text-[#c9418b] transition flex items-center space-x-1 cursor-pointer">
+                                <i class="fas fa-plus text-[10px]"></i>
+                                <span>Adicionar Custo</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div id="boxNovaCategoria" class="hidden bg-pink-50/60 border border-pink-100 p-3 rounded-xl space-y-2 transition-all">
-                    <label class="block text-xs font-bold text-gray-700">Cadastrar Nova Categoria</label>
-                    <div class="flex space-x-2">
-                        <input type="text" id="inputNomeCategoria" placeholder="Ex: Embalagens, Anúncios, Taxas..." 
-                            class="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs bg-white outline-none focus:ring-2 focus:ring-[#E052A0]">
-                        <button type="button" onclick="salvarNovaCategoriaInline()" 
-                            class="bg-[#E052A0] text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-[#c9418b] transition cursor-pointer shrink-0">
-                            Salvar
-                        </button>
-                        <button type="button" onclick="toggleBoxNovaCategoria(false)" 
-                            class="text-xs text-gray-500 hover:text-gray-700 px-2 cursor-pointer shrink-0">
-                            Cancelar
-                        </button>
+                    <div id="boxNovaCategoria" class="hidden bg-pink-50/60 border border-pink-100 p-3 rounded-xl space-y-2 transition-all">
+                        <label class="block text-xs font-bold text-gray-700">Cadastrar Nova Categoria</label>
+                        <div class="flex space-x-2">
+                            <input type="text" id="inputNomeCategoria" placeholder="Ex: Embalagens, Anúncios, Taxas..." 
+                                class="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs bg-white outline-none focus:ring-2 focus:ring-[#E052A0]">
+                            <button type="button" onclick="salvarNovaCategoriaInline()" 
+                                class="bg-[#E052A0] text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-[#c9418b] transition cursor-pointer shrink-0">
+                                Salvar
+                            </button>
+                            <button type="button" onclick="toggleBoxNovaCategoria(false)" 
+                                class="text-xs text-gray-500 hover:text-gray-700 px-2 cursor-pointer shrink-0">
+                                Cancelar
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Adicionei texto de "carregando" visual -->
-                <div id="containerCustos" class="space-y-2.5">
-                    <p class="text-xs text-gray-400 text-center py-2" id="loadingCustos">Carregando dados...</p>
+                    <div id="containerCustos" class="space-y-2.5"></div>
                 </div>
-            </div>
-
-            <div class="flex items-center justify-end space-x-2 pt-4 border-t border-gray-100 shrink-0">
+            </form>
+            
+            <div class="flex items-center justify-end space-x-2 pt-4 border-t border-gray-100 shrink-0 mt-4">
                 <button type="button" onclick="closeFecharMesModal()"
                     class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
                     Cancelar
                 </button>
-                <button type="submit"
+                <button type="button" onclick="document.getElementById('formFecharMes').dispatchEvent(new Event('submit'))"
                     class="bg-[#E052A0] hover:bg-[#c9418b] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2 cursor-pointer">
                     <i class="fas fa-check"></i>
                     <span>Confirmar Fechamento</span>
                 </button>
             </div>
-        </form>
+        </div>
+
+        <!-- Lado Direito: Histórico (Meses anteriores) -->
+        <div class="hidden md:flex w-1/3 bg-gray-50 flex-col border-l border-gray-100 relative">
+            <button onclick="closeFecharMesModal()" type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition p-1">
+                <i class="fas fa-times text-base"></i>
+            </button>
+            <div class="p-6 h-full flex flex-col">
+                <h4 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wider">Meses Anteriores</h4>
+                <div id="listaMesesSalvos" class="space-y-2 overflow-y-auto pr-2 flex-1 text-sm">
+                    <p class="text-xs text-gray-400 italic">Carregando histórico...</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -353,7 +355,6 @@
             const toastIcon = document.getElementById('toastIcon');
 
             if (!toast) return;
-
             toastTitle.innerText = titulo;
             toastMessage.innerText = mensagem;
 
@@ -385,6 +386,10 @@
             }
         }
 
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
         function toggleBoxNovaCategoria(exibir) {
             const box = document.getElementById('boxNovaCategoria');
             const input = document.getElementById('inputNomeCategoria');
@@ -400,10 +405,8 @@
         function salvarNovaCategoriaInline() {
             const input = document.getElementById('inputNomeCategoria');
             const nomeNova = input ? input.value.trim() : '';
-            if (!nomeNova) {
-                showToast('Atenção', 'Digite o nome da categoria.', 'alerta');
-                return;
-            }
+            if (!nomeNova) return;
+            
             const slug = 'custom_' + Date.now();
             CATEGORIAS_CUSTOS.push({ value: slug, label: nomeNova });
 
@@ -416,15 +419,12 @@
 
             adicionarLinhaCusto(slug);
             toggleBoxNovaCategoria(false);
-            showToast('Sucesso', `Categoria "${nomeNova}" criada!`);
         }
 
-        // NOVO: Adiciona um ouvinte para recarregar os dados se a pessoa trocar o mês no calendário
         document.getElementById('mesReferencia').addEventListener('change', function(e) {
             carregarCustosMes(e.target.value);
         });
 
-        // ATUALIZADO: Agora ao abrir o modal, ele lê o banco de dados
         function openFecharMesModal() {
             const modal = document.getElementById('modalFecharMes');
             if (modal) {
@@ -436,12 +436,36 @@
                     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
                     mesInput.value = `${ano}-${mes}`;
                 }
-                
                 carregarCustosMes(mesInput.value);
+                carregarHistoricoMeses();
             }
         }
+        
+        function carregarHistoricoMeses() {
+            const container = document.getElementById('listaMesesSalvos');
+            fetch('/api/custos-meses')
+                .then(res => res.json())
+                .then(data => {
+                    container.innerHTML = '';
+                    if (data.sucesso && data.meses.length > 0) {
+                        data.meses.forEach(mesStr => {
+                            const mesDate = new Date(mesStr + '-01T00:00:00');
+                            const nomeMes = mesDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+                            
+                            container.innerHTML += `
+                                <div onclick="document.getElementById('mesReferencia').value='${mesStr}'; carregarCustosMes('${mesStr}')" 
+                                     class="p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:border-[#E052A0] hover:shadow-sm transition flex items-center justify-between group">
+                                    <span class="capitalize font-bold text-gray-700 group-hover:text-[#E052A0]">${nomeMes}</span>
+                                    <i class="fas fa-chevron-right text-[10px] text-gray-300 group-hover:text-[#E052A0]"></i>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        container.innerHTML = '<p class="text-xs text-gray-400">Nenhum mês registrado ainda.</p>';
+                    }
+                }).catch(e => container.innerHTML = '<p class="text-xs text-red-400">Erro ao carregar histórico.</p>');
+        }
 
-        // NOVO: Função que busca os dados no Python e monta as linhas
         function carregarCustosMes(mes) {
             const container = document.getElementById('containerCustos');
             container.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Carregando dados...</p>';
@@ -450,35 +474,25 @@
                 .then(res => res.json())
                 .then(data => {
                     container.innerHTML = ''; 
-                    
                     if (data.sucesso && data.custos.length > 0) {
                         data.custos.forEach(custo => {
-                            // Se a categoria veio do banco e não está na lista inicial, adiciona ela para não quebrar
-                            const existe = CATEGORIAS_CUSTOS.find(c => c.value === custo.categoriaKey);
-                            if (!existe) {
+                            if (!CATEGORIAS_CUSTOS.find(c => c.value === custo.categoriaKey)) {
                                 CATEGORIAS_CUSTOS.push({ value: custo.categoriaKey, label: custo.categoriaNome });
                             }
                         });
-                        
-                        data.custos.forEach(custo => {
-                            adicionarLinhaCusto(custo.categoriaKey, custo.valor);
-                        });
+                        data.custos.forEach(custo => adicionarLinhaCusto(custo.categoriaKey, custo.valor));
                     } else {
-                        // Se o banco voltar vazio, coloca as duas linhas padrão
                         adicionarLinhaCusto('energia');
                         adicionarLinhaCusto('agua');
                     }
-                })
-                .catch(err => {
+                }).catch(err => {
                     container.innerHTML = '';
-                    console.error('Erro ao buscar:', err);
                     showToast('Atenção', 'Não foi possível carregar o histórico desse mês.', 'erro');
                 });
         }
 
         function closeFecharMesModal() {
-            const modal = document.getElementById('modalFecharMes');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('modalFecharMes').classList.add('hidden');
         }
 
         function adicionarLinhaCusto(categoriaSelecionada = 'gas', valor = '') {
@@ -501,14 +515,9 @@
                     <input type="number" step="0.01" min="0" placeholder="0,00" value="${valor}" required
                         class="valor-custo w-full pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-[#E052A0] outline-none transition">
                 </div>
-                <button type="button" onclick="removerLinhaCusto(this)" class="p-2 text-gray-400 hover:text-red-500 rounded-lg transition"><i class="fas fa-trash-alt text-xs"></i></button>
+                <button type="button" onclick="this.closest('.item-custo').remove()" class="p-2 text-gray-400 hover:text-red-500 rounded-lg transition"><i class="fas fa-trash-alt text-xs"></i></button>
             `;
             container.appendChild(divLinha);
-        }
-
-        function removerLinhaCusto(botao) {
-            const linha = botao.closest('.item-custo');
-            if (linha) linha.remove();
         }
 
         function salvarFechamentoMes(event) {
@@ -520,11 +529,9 @@
             document.querySelectorAll('#containerCustos .item-custo').forEach(linha => {
                 const select = linha.querySelector('.categoria-custo');
                 const valor = parseFloat(linha.querySelector('.valor-custo').value) || 0;
-                const categoriaNome = select.options[select.selectedIndex]?.text || select.value;
-
                 itensCustos.push({
                     categoriaKey: select.value,
-                    categoriaNome: categoriaNome,
+                    categoriaNome: select.options[select.selectedIndex]?.text || select.value,
                     valor: valor
                 });
                 totalCustos += valor;
@@ -534,46 +541,85 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mes: mes, custos: itensCustos })
-            })
-            .then(response => response.json())
-            .then(data => {
+            }).then(response => response.json()).then(data => {
                 if (data.sucesso) {
-                    showToast('Mês Fechado!', `Mês ${mes} registrado com total de R$ ${totalCustos.toFixed(2)}`);
+                    showToast('Mês Fechado!', `Mês ${mes} registrado com R$ ${totalCustos.toFixed(2)}`);
                     closeFecharMesModal();
+                    
+                    // Recarrega a página após salvar para atualizar os gráficos
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 } else {
-                    showToast('Atenção', 'Erro ao salvar: ' + data.erro, 'erro');
+                    showToast('Atenção', 'Erro ao salvar', 'erro');
                 }
-            })
-            .catch(error => {
-                console.error('Erro na requisição:', error);
-                showToast('Erro de Conexão', 'Não foi possível contatar o servidor.', 'erro');
             });
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        }
+        // Gráfico de Linha de Tempo (Limpo e sem cifrão no eixo)
+        const mesesLinha = {{ meses_linha | tojson }};
+        const linhaReceitas = {{ linha_receitas | tojson }};
+        const linhaCustosOp = {{ linha_custos_op | tojson }};
+        const linhaCustosIngredientes = {{ linha_custos_ingredientes | tojson }};
 
         Plotly.newPlot('graficoLinha', [
-            { x: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'], y: [300, 340, 310, 370, 320, 420, 380, 440, 410, 430], name: 'Receita Total', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#10B981', width: 2 }, fillcolor: 'rgba(16, 185, 129, 0.1)' },
-            { x: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'], y: [230, 245, 235, 260, 250, 275, 265, 285, 275, 290], name: 'Custos Operacionais', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#F59E0B', width: 2 }, fillcolor: 'rgba(245, 158, 11, 0.1)' },
-            { x: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'], y: [110, 125, 115, 135, 120, 145, 130, 155, 140, 150], name: 'Custo Ingredientes', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#EF4444', width: 2 }, fillcolor: 'rgba(239, 68, 68, 0.1)' }
+            { 
+                x: mesesLinha, y: linhaReceitas, 
+                name: 'Receita Total', type: 'scatter', mode: 'lines', 
+                line: { color: '#10B981', width: 3, shape: 'spline' },
+                fill: 'tozeroy', fillcolor: 'rgba(16, 185, 129, 0.05)',
+                hovertemplate: '<b>%{x}</b><br>R$ %{y:.2f}<extra></extra>'
+            },
+            { 
+                x: mesesLinha, y: linhaCustosOp, 
+                name: 'Custos operacionais', type: 'scatter', mode: 'lines', 
+                line: { color: '#F59E0B', width: 3, shape: 'spline' },
+                fill: 'tozeroy', fillcolor: 'rgba(245, 158, 11, 0.05)',
+                hovertemplate: '<b>%{x}</b><br>R$ %{y:.2f}<extra></extra>'
+            },
+            { 
+                x: mesesLinha, y: linhaCustosIngredientes, 
+                name: 'Custo Ingredientes', type: 'scatter', mode: 'lines', 
+                line: { color: '#EF4444', width: 3, shape: 'spline' },
+                fill: 'tozeroy', fillcolor: 'rgba(239, 68, 68, 0.05)',
+                hovertemplate: '<b>%{x}</b><br>R$ %{y:.2f}<extra></extra>'
+            }
         ], {
-            margin: { t: 20, b: 30, l: 40, r: 20 },
-            legend: { orientation: 'h', y: 1.15, x: 0 },
-            xaxis: { showgrid: false },
-            yaxis: { gridcolor: '#F3F4F6' }
-        }, { responsive: true });
+            margin: { t: 10, b: 30, l: 40, r: 10 },
+            legend: { orientation: 'h', y: 1.15, x: 0, font: { color: '#6B7280' } },
+            xaxis: { 
+                showgrid: false, 
+                zeroline: false,
+                tickfont: { color: '#9CA3AF' }
+            },
+            yaxis: { 
+                showgrid: true, 
+                gridcolor: '#F3F4F6', 
+                gridwidth: 1,
+                zeroline: false,
+                tickfont: { color: '#9CA3AF' }
+                // Eixo mantido puramente numérico, o R$ aparece apenas no hover (passar o mouse)
+            },
+            plot_bgcolor: 'transparent',
+            paper_bgcolor: 'transparent',
+            hovermode: 'x unified' // Cria aquela linha vertical moderna ao passar o mouse
+        }, { responsive: true, displayModeBar: false });
 
+
+        // Gráfico Doughnut: Receitas Mais Vendidas
         const catLabels = {{ cat_labels | tojson }};
         const catValues = {{ cat_values | tojson }};
+        const totalVendas = catValues.reduce((a, b) => a + b, 0);
+        
+        // Cores vibrantes (Estilo GLACE)
+        const chartColors = ['#E052A0', '#F472B6', '#FBCFE8', '#DDD6FE', '#C7D2FE', '#93C5FD', '#6EE7B7'];
 
         Plotly.newPlot('graficoDoughnut', [{
             values: catValues,
             labels: catLabels,
             type: 'pie',
             hole: 0.65,
-            marker: { colors: ['#E052A0', '#F472B6', '#FBCFE8', '#DDD6FE', '#C7D2FE'] },
+            marker: { colors: chartColors },
             textinfo: 'percent',
             textfont: { color: '#374151', size: 10 }
         }], {
@@ -582,12 +628,23 @@
             annotations: [{
                 font: { size: 11, weight: 'bold', color: '#6B7280' },
                 showarrow: false,
-                text: 'RECEITA TOTAL<br><span style="font-size:13px; color:#111827; font-weight:bold;">R$ 8.540,70</span>',
+                text: 'FATURAMENTO<br><span style="font-size:13px; color:#111827; font-weight:bold;">R$ ' + totalVendas.toFixed(2).replace('.', ',') + '</span>',
                 x: 0.5,
                 y: 0.5
             }]
-        }, { responsive: true });
+        }, { responsive: true, displayModeBar: false });
 
+        // Popular legenda Doughnut dinamicamente
+        const legendContainer = document.getElementById('doughnut-legend');
+        legendContainer.innerHTML = '';
+        catLabels.forEach((label, idx) => {
+            if(totalVendas > 0) {
+                const cor = chartColors[idx % chartColors.length];
+                legendContainer.innerHTML += `<div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${cor}"></span><span class="text-gray-600 font-medium truncate" title="${label}">${label}</span></div>`;
+            }
+        });
+
+        // Gráfico Barras Horizontais (Margem de Lucro)
         const dadosMargem = {
             nomes: {{ nomes_receitas | tojson }},
             custo_pct: {{ custo_pcts | tojson }},
@@ -596,30 +653,30 @@
         };
 
         const alturaMargem = Math.max(280, 38 * dadosMargem.nomes.length);
+        const formatNames = dadosMargem.nomes.map(n => n.length > 20 ? n.substring(0, 17) + '...' : n);
 
         if (dadosMargem.nomes.length > 0) {
             Plotly.newPlot('chart-margem', [
                 {
-                    y: dadosMargem.nomes, x: dadosMargem.custo_pct, name: 'Custo dos Insumos (CMPM)',
+                    y: formatNames, x: dadosMargem.custo_pct, name: 'Custo de Insumos (CMPM)',
                     type: 'bar', orientation: 'h', marker: { color: '#E5484D' },
-                    text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }
+                    text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }, constraintext: 'none'
                 },
                 {
-                    y: dadosMargem.nomes, x: dadosMargem.margem_pct_v, name: 'Margem de Lucro Bruta',
+                    y: formatNames, x: dadosMargem.margem_pct_v, name: 'Margem de Lucro Bruta',
                     type: 'bar', orientation: 'h', marker: { color: '#1F9D6E' },
-                    text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }
+                    text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }, constraintext: 'none'
                 }
             ], {
                 barmode: 'stack',
                 height: alturaMargem,
-                margin: { l: 140, r: 70, t: 10, b: 35 },
-                yaxis: { type: 'category' },
+                margin: { l: 150, r: 70, t: 10, b: 35 },
+                yaxis: { type: 'category', automargin: true },
                 xaxis: { title: '% do Preço de Venda', ticksuffix: '%', range: [0, 100] },
                 legend: { orientation: 'h', y: 1.15, x: 0, font: { size: 11 } },
                 font: { family: 'Inter, sans-serif' },
-                plot_bgcolor: 'white',
-                paper_bgcolor: 'white',
-                annotations: dadosMargem.nomes.map((n, i) => ({
+                plot_bgcolor: 'white', paper_bgcolor: 'white',
+                annotations: formatNames.map((n, i) => ({
                     x: 103, y: n, text: 'R$ ' + dadosMargem.precos[i].toFixed(2), showarrow: false, xanchor: 'left',
                     font: { size: 10, color: '#6B7280' }
                 }))
@@ -630,7 +687,7 @@
                 `🔺 Maior margem: <b>${dadosMargem.nomes[dadosMargem.nomes.length - 1]}</b> ` +
                 `(${dadosMargem.margem_pct_v[dadosMargem.margem_pct_v.length - 1].toFixed(0)}%)`;
         } else {
-            document.getElementById('chart-margem').innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Nenhuma receita cadastrada com ingredientes vinculados ainda.</p>';
+            document.getElementById('chart-margem').innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Nenhuma receita com ingredientes vinculados ainda.</p>';
         }
     </script>
 </body>
