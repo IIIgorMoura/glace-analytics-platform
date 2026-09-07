@@ -28,7 +28,6 @@
             <button onclick="toggleMobileMenu()" class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
                 <i class="fas fa-bars text-sm"></i>
             </button>
-
             <button class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
                 <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Sair</span>
             </button>
@@ -47,13 +46,30 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
             <div>
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Gestão de pedidos</h2>
-                <button class="text-xs text-gray-500 hover:text-gray-800 font-medium mt-1 flex items-center">
-                    <i class="fas fa-filter mr-1.5 text-gray-400"></i> Filtrar por Período
+                <div class="flex items-center space-x-2 mt-2">
+                    <span class="text-xs text-gray-500 font-medium flex items-center">
+                        <i class="fas fa-filter mr-1.5 text-gray-400"></i> Filtrar status:
+                    </span>
+                    <select onchange="filtrarPorStatus(this.value)" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-700 font-medium focus:outline-none focus:border-[#7B88E8] cursor-pointer">
+                        <option value="Todos" {% if status_atual == 'Todos' or not status_atual %}selected{% endif %}>Todos os status</option>
+                        <option value="Pendente" {% if status_atual == 'Pendente' %}selected{% endif %}>Pendente</option>
+                        <option value="Pronto" {% if status_atual == 'Pronto' %}selected{% endif %}>Pronto</option>
+                        <option value="Entregue" {% if status_atual == 'Entregue' %}selected{% endif %}>Entregue</option>
+                        <option value="Atrasado" {% if status_atual == 'Atrasado' %}selected{% endif %}>Atrasado</option>
+                        <option value="Cancelado" {% if status_atual == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <button onclick="abrirListaCompras()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-medium transition text-sm shadow-sm flex items-center space-x-2 border border-gray-200">
+                    <i class="fas fa-shopping-cart text-[#7B88E8]"></i> <span>Lista de Compras</span>
+                </button>
+
+                <button onclick="abrirModalPedido()" class="bg-[#7B88E8] hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium transition text-sm shadow-sm flex items-center space-x-2">
+                    <i class="fas fa-plus"></i> <span>Registrar novo pedido</span>
                 </button>
             </div>
-            <button onclick="abrirModalPedido()" class="bg-[#7B88E8] hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium transition text-sm shadow-sm flex items-center space-x-2">
-                <i class="fas fa-plus"></i> <span>Registrar novo pedido</span>
-            </button>
         </div>
 
         <div class="overflow-x-auto border border-gray-100 rounded-xl">
@@ -69,6 +85,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50 text-sm">
                     {% for p in pedidos %}
+                    {% set is_final = p.status in ['Entregue', 'Cancelado'] %}
                     <tr class="hover:bg-gray-50/80 transition-colors">
                         <td class="px-6 py-4 text-gray-600">
                             <div class="flex items-center space-x-2">
@@ -93,14 +110,13 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center space-x-3">
                                 <select onchange="atualizarStatus(this, {{ p.id }}, this.value)" data-status="{{ p.status }}" 
-                                        class="status-select border rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none cursor-pointer transition-all duration-300">
+                                        class="status-select border rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none transition-all duration-300 {% if is_final %}bg-gray-100 text-gray-400 cursor-not-allowed opacity-75{% else %}cursor-pointer{% endif %}"
+                                        {% if is_final %}disabled{% endif %}>
                                     <option value="Pendente" {% if p.status == 'Pendente' %}selected{% endif %}>Pendente</option>
                                     <option value="Pronto" {% if p.status == 'Pronto' %}selected{% endif %}>Pronto</option>
                                     <option value="Entregue" {% if p.status == 'Entregue' %}selected{% endif %}>Entregue</option>
                                     <option value="Atrasado" {% if p.status == 'Atrasado' %}selected{% endif %}>Atrasado</option>
                                     <option value="Cancelado" {% if p.status == 'Cancelado' %}selected{% endif %}>Cancelado</option>
-                                    <option value="Recusado" {% if p.status == 'Recusado' %}selected{% endif %}>Recusado</option>
-                                    <option value="Finalizado" {% if p.status == 'Finalizado' %}selected{% endif %}>Finalizado</option>
                                 </select>
                                 
                                 <button onclick="abrirModalEditar({{ p.id }})" title="Detalhes e Edição" class="text-gray-400 hover:text-[#7B88E8] transition-colors p-2 rounded-lg hover:bg-indigo-50">
@@ -112,7 +128,7 @@
                     {% else %}
                     <tr>
                         <td colspan="5" class="px-6 py-8 text-center text-gray-400">
-                            Nenhum pedido registrado ainda.
+                            Nenhum pedido encontrado.
                         </td>
                     </tr>
                     {% endfor %}
@@ -120,6 +136,31 @@
             </table>
         </div>
     </main>
+
+    <!-- Modal Lista de Compras -->
+    <div id="modalListaCompras" class="hidden fixed inset-0 bg-gray-900/60 z-[100] flex items-center justify-center backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-shopping-basket text-[#7B88E8]"></i>
+                    <h3 class="text-lg font-bold text-gray-900">Lista de Compras Necessária</h3>
+                </div>
+                <button onclick="fecharListaCompras()" class="text-gray-400 hover:text-gray-700 transition"><i class="fas fa-times text-lg"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="flex justify-between items-center bg-indigo-50/60 border border-indigo-100 p-4 rounded-xl mb-4">
+                    <span class="text-sm font-semibold text-indigo-900">Custo Total Estimado:</span>
+                    <span id="custoTotalCompras" class="text-xl font-extrabold text-[#7B88E8]">R$ 0,00</span>
+                </div>
+                <div id="conteudoListaCompras" class="space-y-2">
+                    <!-- Injetado via JS -->
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex justify-end">
+                <button onclick="fecharListaCompras()" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Fechar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Novo/Editar Pedido -->
     <div id="modalNovoPedido" class="hidden fixed inset-0 bg-gray-900/60 z-[100] flex items-center justify-center backdrop-blur-sm p-4">
@@ -180,9 +221,7 @@
             'Pronto': 'text-sky-600 bg-sky-50 border-sky-200',
             'Entregue': 'text-emerald-700 bg-emerald-50 border-emerald-200',
             'Atrasado': 'text-red-600 bg-red-50 border-red-200',
-            'Cancelado': 'text-rose-600 bg-rose-50 border-rose-200',
-            'Recusado': 'text-rose-600 bg-rose-50 border-rose-200',
-            'Finalizado': 'text-gray-400 bg-gray-100 border-gray-200 opacity-60' 
+            'Cancelado': 'text-rose-600 bg-rose-50 border-rose-200'
         };
 
         document.addEventListener('DOMContentLoaded', aplicarCoresStatus);
@@ -196,6 +235,10 @@
             });
         }
 
+        function filtrarPorStatus(status) {
+            window.location.href = `/pedidos?status=${status}`;
+        }
+
         async function atualizarStatus(selectElement, id, novoStatus) {
             const originalStatus = selectElement.getAttribute('data-status');
 
@@ -207,7 +250,10 @@
 
             if (response.ok) {
                 selectElement.setAttribute('data-status', novoStatus);
-                aplicarCoresStatus(); 
+                aplicarCoresStatus();
+                if (novoStatus === 'Entregue' || novoStatus === 'Cancelado') {
+                    window.location.reload(); 
+                }
             } else {
                 alert('Erro ao atualizar status.');
                 selectElement.value = originalStatus; 
@@ -215,13 +261,46 @@
             }
         }
 
+        async function abrirListaCompras() {
+            const response = await fetch('/api/pedidos/lista-compras');
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('custoTotalCompras').innerText = 'R$ ' + data.custo_total.toFixed(2).replace('.', ',');
+                
+                const container = document.getElementById('conteudoListaCompras');
+                container.innerHTML = '';
+
+                if (data.lista.length === 0) {
+                    container.innerHTML = '<div class="text-center py-8 text-gray-400"><i class="fas fa-check-circle text-emerald-500 text-3xl mb-2"></i><p>Estoque suficiente para todos os pedidos pendentes!</p></div>';
+                } else {
+                    data.lista.forEach(item => {
+                        const html = `
+                            <div class="flex justify-between items-center bg-gray-50 border border-gray-100 p-3 rounded-xl">
+                                <div>
+                                    <span class="font-bold text-gray-900 block">${item.nome}</span>
+                                    <span class="text-xs text-gray-500">Faltam: <strong>${item.falta.toFixed(2)} ${item.un_medida}</strong> (Estoque: ${item.estoque} | Necessário: ${item.necessario})</span>
+                                </div>
+                                <span class="font-bold text-[#7B88E8] text-sm">R$ ${item.custo_estimado.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', html);
+                    });
+                }
+                document.getElementById('modalListaCompras').classList.remove('hidden');
+            } else {
+                alert('Erro ao carregar lista de compras.');
+            }
+        }
+
+        function fecharListaCompras() {
+            document.getElementById('modalListaCompras').classList.add('hidden');
+        }
+
         function abrirModalPedido() {
             pedidoIdEditando = null;
             document.querySelector('#modalNovoPedido h3').innerText = 'Registrar Novo Pedido';
             document.getElementById('modalNovoPedido').classList.remove('hidden');
-            
             document.getElementById('btnExcluirPedido').classList.add('hidden');
-            
             document.getElementById('containerItens').innerHTML = '';
             document.getElementById('clienteNome').value = '';
             document.getElementById('dataEntrega').value = '';
@@ -232,9 +311,7 @@
         async function abrirModalEditar(id) {
             pedidoIdEditando = id;
             document.querySelector('#modalNovoPedido h3').innerText = 'Detalhes e Edição do Pedido #' + id;
-            
             document.getElementById('btnExcluirPedido').classList.remove('hidden');
-            
             document.getElementById('containerItens').innerHTML = ''; 
 
             const response = await fetch(`/api/pedidos/${id}`);
@@ -264,17 +341,16 @@
             const container = document.getElementById('containerItens');
             const divId = 'item-' + Date.now();
 
-            let optionsHtml = '<option value="">Selecione uma receita...</option>';
-            receitasDisponiveis.forEach(r => {
-                const selected = r.id == receita_id ? 'selected' : '';
-                optionsHtml += `<option value="${r.id}" data-preco="${r.preco_venda || 0}" ${selected}>${r.nome} - R$ ${(r.preco_venda || 0).toFixed(2)}</option>`;
-            });
-
             const html = `
                 <div id="${divId}" class="flex items-center space-x-2 bg-gray-50 p-2 rounded-xl border border-gray-100 linha-item transition-all">
                     <div class="flex-1">
-                        <select class="select-receita w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#7B88E8]" onchange="calcularTotal()">
-                            ${optionsHtml}
+                        <select class="select-receita w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#7B88E8]" onchange="atualizarOpcoesReceitas(); calcularTotal();">
+                            <option value="">Selecione uma receita...</option>
+                            ${receitasDisponiveis.map(r => `
+                                <option value="${r.id}" data-preco="${r.preco_venda || 0}" ${r.id == receita_id ? 'selected' : ''}>
+                                    ${r.nome} - R$ ${(r.preco_venda || 0).toFixed(2)}
+                                </option>
+                            `).join('')}
                         </select>
                     </div>
                     <div class="w-24">
@@ -286,11 +362,35 @@
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', html);
+            atualizarOpcoesReceitas();
+            calcularTotal();
         }
 
         function removerLinhaItem(id) {
             document.getElementById(id).remove();
+            atualizarOpcoesReceitas();
             calcularTotal();
+        }
+
+        function atualizarOpcoesReceitas() {
+            const linhas = document.querySelectorAll('.linha-item');
+            const selecionadas = Array.from(linhas).map(linha => linha.querySelector('.select-receita').value).filter(val => val !== "");
+
+            linhas.forEach(linha => {
+                const select = linha.querySelector('.select-receita');
+                const valorAtual = select.value;
+                
+                Array.from(select.options).forEach(option => {
+                    if (option.value === "") return;
+                    if (selecionadas.includes(option.value) && option.value !== valorAtual) {
+                        option.disabled = true;
+                        option.style.color = "#d1d5db";
+                    } else {
+                        option.disabled = false;
+                        option.style.color = "";
+                    }
+                });
+            });
         }
 
         function calcularTotal() {
@@ -359,7 +459,7 @@
                 if (response.ok) {
                     window.location.reload();
                 } else {
-                    alert('Erro ao excluir o pedido. Verifique o servidor.');
+                    alert('Erro ao excluir o pedido.');
                 }
             }
         }
