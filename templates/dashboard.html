@@ -13,16 +13,14 @@
 <body class="bg-gray-50 font-sans antialiased text-gray-800">
 
     <header
-        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md relative">
+        class="bg-[#0D0D11] text-white p-3 md:p-4 mx-2 md:mx-4 mt-2 md:mt-4 rounded-xl flex items-center justify-between shadow-md">
 
-        <!-- LADO ESQUERDO: Logo -->
-        <div class="flex items-center space-x-2 md:space-x-3 ml-2">
+        <div class="flex items-center space-x-2 md:space-x-3 ml-2 shrink-0">
             <img src="{{ url_for('static', filename='img/logo_glace.svg') }}" alt="GLACE Logo"
                 class="w-8 h-8 md:w-10 md:h-10">
             <h1 class="text-xl md:text-2xl font-bold tracking-widest text-[#E052A0]">GLACE</h1>
         </div>
 
-        <!-- CENTRO: Navegação (Permanece perfeitamente centralizada) -->
         <nav class="hidden md:flex space-x-1 border border-gray-800 rounded-full p-1 bg-[#121217]">
             <a href="/dashboard"
                 class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'dashboard' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Dashboard</a>
@@ -34,26 +32,25 @@
                 class="px-5 py-2 rounded-full transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white{% else %}text-gray-400 hover:text-white{% endif %}">Receitas</a>
         </nav>
 
-        <!-- LADO DIREITO: Botões padrão -->
-        <div class="flex items-center space-x-2 mr-2 md:mr-4">
+        <div class="flex items-center space-x-2 mr-2">
+            
+            <button onclick="openFecharMesModal()"
+                class="bg-[#E052A0] hover:bg-[#c9418b] text-white font-semibold px-3 py-2 rounded-lg text-xs md:text-sm transition flex items-center space-x-1 md:space-x-2 shadow-lg shadow-[#E052A0]/20 cursor-pointer">
+                <i class="fas fa-calculator text-xs"></i>
+                <span class="hidden sm:inline">Custos operacionais</span>
+                <span class="sm:hidden">Custos</span>
+            </button>
+
             <button onclick="toggleMobileMenu()"
-                class="md:hidden border border-gray-700 p-2.5 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center">
+                class="md:hidden border border-gray-700 p-2 rounded-lg text-gray-300 hover:text-white hover:border-[#E052A0] transition flex items-center justify-center shrink-0">
                 <i class="fas fa-bars text-sm"></i>
             </button>
 
             <button
-                class="border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white flex items-center space-x-2 text-sm transition">
-                <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Sair</span>
+                class="hidden md:flex border border-gray-700 px-3 md:px-4 py-2 rounded-lg text-gray-300 hover:text-white items-center space-x-2 text-sm transition shrink-0">
+                <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
             </button>
         </div>
-
-        <!-- BOTÃO ABSOLUTO (Não interfere no layout flex dos outros elementos) -->
-        <button onclick="openFecharMesModal()"
-            class="absolute right-20 sm:right-28 md:right-32 top-1/2 -translate-y-1/2 bg-[#E052A0] hover:bg-[#c9418b] text-white font-semibold px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm transition flex items-center space-x-2 shadow-lg shadow-[#E052A0]/20 cursor-pointer">
-            <i class="fas fa-calendar-check text-xs"></i>
-            <span>Fechar mês</span>
-        </button>
-        </button>
     </header>
 
     <div id="mobileMenu"
@@ -66,53 +63,54 @@
             class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'ingredientes' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Ingredientes</a>
         <a href="/receitas"
             class="block px-4 py-2.5 rounded-lg transition text-sm font-medium {% if active == 'receitas' %}border border-[#E052A0] text-white bg-[#0D0D11]{% else %}text-gray-400 hover:text-white hover:bg-[#0D0D11]/50{% endif %}">Receitas</a>
+        <button
+            class="w-full text-left flex items-center px-4 py-2.5 rounded-lg transition text-sm font-medium text-gray-400 hover:text-white hover:bg-[#0D0D11]/50 mt-2 border-t border-gray-800 pt-3">
+            <i class="fas fa-sign-out-alt mr-2"></i> Sair
+        </button>
     </div>
 
     <main class="p-4 md:p-8 max-w-7xl mx-auto space-y-6 mb-8">
 
+        <!-- PAINEL DE ALERTAS DINÂMICO -->
         <div class="bg-[#EBF5FF] border border-[#BFDBFE] rounded-2xl p-5 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                 <div class="flex items-center space-x-3">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                    <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
                         <i class="fas fa-exclamation"></i>
                     </div>
                     <div>
                         <h3 class="font-bold text-gray-900 text-base">Alertas & Tarefas Pendentes</h3>
-                        <p class="text-xs text-blue-700">3 tarefas aguardando ação</p>
+                        <p class="text-xs text-blue-700">{{ qtd_alertas }} tarefas aguardando ação</p>
                     </div>
                 </div>
-                <a href="#" class="text-xs font-bold text-blue-600 hover:underline mt-2 sm:mt-0">Ver todos <i
-                        class="fas fa-chevron-right text-[10px]"></i></a>
+                {% if qtd_alertas > 3 %}
+                <button onclick="openModalAlertas()" class="text-xs font-bold text-blue-600 hover:underline mt-2 sm:mt-0 cursor-pointer">
+                    Ver todos <i class="fas fa-chevron-right text-[10px]"></i>
+                </button>
+                {% endif %}
             </div>
+            
             <div class="bg-white rounded-xl border border-blue-100 divide-y divide-gray-100 text-sm">
-                <div class="p-3.5 flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <input type="checkbox"
-                            class="peer rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
-                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">
-                            Verificar estoque de farinha — abaixo do mínimo
-                        </span>
-                    </div>
-                    <span class="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-md">URGENTE</span>
+                {% if qtd_alertas == 0 %}
+                <div class="p-4 text-center text-gray-500 text-xs font-medium">
+                    Tudo tranquilo por aqui! Nenhuma tarefa urgente no momento.
                 </div>
-                <div class="p-3.5 flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <input type="checkbox"
-                            class="rounded peer border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
-                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Confirmar
-                            pedido #4521 — Mini vulcão</span>
+                {% else %}
+                    <!-- Renderiza no máximo os 3 primeiros alertas -->
+                    {% for alerta in alertas[:3] %}
+                    <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                        <div class="flex items-center space-x-3">
+                            <input type="checkbox" onclick="concluirTarefa(this)" class="peer rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
+                            <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">
+                                {{ alerta.texto }}
+                            </span>
+                        </div>
+                        {% if alerta.urgente %}
+                        <span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-1 rounded-md">URGENTE</span>
+                        {% endif %}
                     </div>
-                    <span class="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-md">URGENTE</span>
-                </div>
-                <div class="p-3.5 flex items-center justify-between bg-gray-50/50">
-                    <div class="flex items-center space-x-3">
-                        <input type="checkbox" checked
-                            class="rounded peer border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
-                        <span class="text-gray-700 peer-checked:line-through peer-checked:text-gray-400">Atualizar
-                            receita do Bolo de Morango</span>
-                    </div>
-                </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
 
@@ -151,9 +149,8 @@
                         alta</span>
                 </div>
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Pedidos Hoje</p>
-                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">37</h3>
-                <p class="text-xs text-emerald-600 font-medium mt-2"><i class="fas fa-caret-up"></i> 12 pedidos vs.
-                    ontem</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">{{ pedidos_hoje }}</h3>
+                <p class="text-xs text-gray-500 font-medium mt-2">Registrados hoje</p>
             </div>
 
             <div
@@ -165,24 +162,9 @@
                         class="bg-amber-50 text-amber-600 text-[11px] font-bold px-2.5 py-1 rounded-full">Atenção</span>
                 </div>
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mt-4">Itens em Alerta</p>
-                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">4</h3>
-                <p class="text-xs text-amber-600 font-medium mt-2"><i class="fas fa-exclamation-circle"></i> Estoque
-                    abaixo do mínimo</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mt-1">{{ qtd_alertas }}</h3>
+                <p class="text-xs text-amber-600 font-medium mt-2"><i class="fas fa-exclamation-circle"></i> Tarefas pendentes</p>
             </div>
-        </div>
-
-        <div class="flex items-center space-x-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm w-fit">
-            <span class="text-xs font-bold text-gray-400 uppercase px-3"><i class="fas fa-filter mr-1"></i>
-                Período:</span>
-            <button
-                class="px-4 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">Hoje</button>
-            <button class="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#E052A0] text-white shadow-sm">7 dias</button>
-            <button class="px-4 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">30
-                dias</button>
-            <button class="px-4 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">3
-                meses</button>
-            <button
-                class="px-4 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">Ano</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -190,7 +172,6 @@
                 <div class="flex justify-between items-center mb-4">
                     <div>
                         <h3 class="font-bold text-lg text-gray-900">Desempenho Financeiro</h3>
-                        <p class="text-xs text-gray-400">Receita, Custo e Lucro por dia</p>
                     </div>
                 </div>
                 <div id="graficoLinha" class="w-full h-80"></div>
@@ -198,37 +179,29 @@
 
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-lg text-gray-900">Lucro por Categoria</h3>
+                    <h3 class="font-bold text-lg text-gray-900">Receita por Categoria</h3> 
                     <p class="text-xs text-gray-400">Itens mais vendidos</p>
                 </div>
                 <div id="graficoDoughnut" class="w-full h-64 my-auto"></div>
                 <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-gray-100">
-                    <div class="flex items-center space-x-2"><span
-                            class="w-3 h-3 rounded-full bg-[#E052A0]"></span><span
-                            class="text-gray-600 font-medium">Bolos Mini Vulcão</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-pink-400"></span><span
-                            class="text-gray-600 font-medium">Bolos de Pote</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-pink-300"></span><span
-                            class="text-gray-600 font-medium">Combos Festa</span></div>
-                    <div class="flex items-center space-x-2"><span
-                            class="w-3 h-3 rounded-full bg-purple-300"></span><span
-                            class="text-gray-600 font-medium">Doces Gourmet</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-[#E052A0]"></span><span class="text-gray-600 font-medium">Bolos Mini Vulcão</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-pink-400"></span><span class="text-gray-600 font-medium">Bolos de Pote</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-pink-300"></span><span class="text-gray-600 font-medium">Combos Festa</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded-full bg-purple-300"></span><span class="text-gray-600 font-medium">Doces Gourmet</span></div>
                 </div>
             </div>
         </div>
 
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h3 class="font-bold text-lg text-gray-900">Margem de Lucro por Item do Cardápio</h3>
-            <p class="text-xs text-gray-400 mb-4">Cada barra = 100% do preço de venda · vermelho = CMV (custo de
-                insumos) · verde = margem de lucro bruta</p>
+            <p class="text-xs text-gray-400 mb-4">Cada barra = 100% do preço de venda · vermelho = CMPM (custo de insumos) · verde = margem de lucro bruta</p>
             <div id="chart-margem" class="w-full"></div>
             <p class="text-xs text-gray-500 mt-3 font-medium" id="legenda-margem"></p>
         </div>
 
     </main>
 
-<!-- MODAL FECHAR MÊS -->
-<!-- NOTIFICAÇÃO TOAST (Bonito e sem alert) -->
+<!-- NOTIFICAÇÃO TOAST -->
 <div id="toastNotification" class="fixed bottom-5 right-5 z-[60] transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center space-x-3 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-gray-800">
     <div id="toastIcon" class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
         <i class="fas fa-check"></i>
@@ -239,19 +212,56 @@
     </div>
 </div>
 
-<!-- MODAL FECHAR MÊS -->
+<!-- MODAL TODOS OS ALERTAS -->
+<div id="modalAlertas" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[80vh] flex flex-col">
+        <div class="flex justify-between items-center border-b border-gray-100 pb-3 shrink-0">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <i class="fas fa-tasks text-base"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-gray-900">Todas as Tarefas</h3>
+                    <p class="text-xs text-gray-500">{{ qtd_alertas }} itens pendentes</p>
+                </div>
+            </div>
+            <button onclick="closeModalAlertas()" type="button" class="text-gray-400 hover:text-gray-600 transition p-1 cursor-pointer">
+                <i class="fas fa-times text-base"></i>
+            </button>
+        </div>
+
+        <div class="overflow-y-auto pr-1 space-y-2">
+            {% for alerta in alertas %}
+            <div class="p-3 flex items-start justify-between border border-gray-100 rounded-xl bg-gray-50 hover:bg-white transition shadow-sm">
+                <div class="flex items-start space-x-3 mt-0.5">
+                    <input type="checkbox" onclick="concluirTarefa(this)" class="peer mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer">
+                    <span class="text-gray-700 text-sm peer-checked:line-through peer-checked:text-gray-400">
+                        {{ alerta.texto }}
+                    </span>
+                </div>
+                {% if alerta.urgente %}
+                <span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-1 rounded-md shrink-0 ml-2">URGENTE</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% if qtd_alertas == 0 %}
+            <p class="text-center text-sm text-gray-400 py-4">Nenhuma tarefa pendente.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CUSTOS OPERACIONAIS -->
 <div id="modalFecharMes" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-5 max-h-[90vh] flex flex-col">
         
-        <!-- Cabeçalho do Modal -->
         <div class="flex justify-between items-center border-b border-gray-100 pb-3 shrink-0">
             <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl bg-pink-50 text-[#E052A0] flex items-center justify-center font-bold">
                     <i class="fas fa-calculator text-base"></i>
                 </div>
                 <div>
-                    <h3 class="text-base font-bold text-gray-900">Fechar Mês</h3>
-                    <p class="text-xs text-gray-500">Custos operacionais da confeitaria em casa</p>
+                    <h3 class="text-base font-bold text-gray-900">Custos operacionais</h3>
                 </div>
             </div>
             <button onclick="closeFecharMesModal()" type="button" class="text-gray-400 hover:text-gray-600 transition p-1">
@@ -259,10 +269,7 @@
             </button>
         </div>
 
-        <!-- Formulário -->
         <form id="formFecharMes" onsubmit="salvarFechamentoMes(event)" class="space-y-4 overflow-y-auto pr-1">
-            
-            <!-- Mês de Referência -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                     Mês de Referência <span class="text-red-500">*</span>
@@ -271,7 +278,6 @@
                     class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#E052A0] focus:border-[#E052A0] outline-none text-gray-800 transition">
             </div>
 
-            <!-- Cabeçalho de Custos com Ações -->
             <div class="pt-2 space-y-3">
                 <div class="flex justify-between items-center">
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
@@ -291,7 +297,6 @@
                     </div>
                 </div>
 
-                <!-- PAINEL COMPACTO PARA CRIAR NOVA CATEGORIA (Inicia Escondido) -->
                 <div id="boxNovaCategoria" class="hidden bg-pink-50/60 border border-pink-100 p-3 rounded-xl space-y-2 transition-all">
                     <label class="block text-xs font-bold text-gray-700">Cadastrar Nova Categoria</label>
                     <div class="flex space-x-2">
@@ -308,11 +313,12 @@
                     </div>
                 </div>
 
-                <!-- Container das linhas de custos dinâmicos -->
-                <div id="containerCustos" class="space-y-2.5"></div>
+                <!-- Adicionei texto de "carregando" visual -->
+                <div id="containerCustos" class="space-y-2.5">
+                    <p class="text-xs text-gray-400 text-center py-2" id="loadingCustos">Carregando dados...</p>
+                </div>
             </div>
 
-            <!-- Ações do Modal -->
             <div class="flex items-center justify-end space-x-2 pt-4 border-t border-gray-100 shrink-0">
                 <button type="button" onclick="closeFecharMesModal()"
                     class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
@@ -327,194 +333,102 @@
         </form>
     </div>
 </div>
+
     <script>
-// Categorias iniciais padrão
-let CATEGORIAS_CUSTOS = [
-    { value: 'energia', label: 'Energia' },
-    { value: 'agua', label: 'Água' },
-    { value: 'gas', label: 'Gás' },
-    { value: 'internet', label: 'Internet / Telefone' },
-    { value: 'mei', label: 'MEI / Impostos' },
-    { value: 'manutencao', label: 'Manutenção de Equipamentos' },
-    { value: 'aluguel', label: 'Aluguel do Espaço' },
-    { value: 'outros', label: 'Outros Custos' }
-];
+        let CATEGORIAS_CUSTOS = [
+            { value: 'energia', label: 'Energia' },
+            { value: 'agua', label: 'Água' },
+            { value: 'gas', label: 'Gás' },
+            { value: 'internet', label: 'Internet / Telefone' },
+            { value: 'mei', label: 'MEI / Impostos' },
+            { value: 'manutencao', label: 'Manutenção de Equipamentos' },
+            { value: 'aluguel', label: 'Aluguel do Espaço' },
+            { value: 'outros', label: 'Outros Custos' }
+        ];
 
-// Notificação Toast Visual (Substitui os alerts)
-function showToast(titulo, mensagem, tipo = 'sucesso') {
-    const toast = document.getElementById('toastNotification');
-    const toastTitle = document.getElementById('toastTitle');
-    const toastMessage = document.getElementById('toastMessage');
-    const toastIcon = document.getElementById('toastIcon');
+        function showToast(titulo, mensagem, tipo = 'sucesso') {
+            const toast = document.getElementById('toastNotification');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
 
-    if (!toast) return;
+            if (!toast) return;
 
-    toastTitle.innerText = titulo;
-    toastMessage.innerText = mensagem;
+            toastTitle.innerText = titulo;
+            toastMessage.innerText = mensagem;
 
-    if (tipo === 'sucesso') {
-        toastIcon.className = 'w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs';
-        toastIcon.innerHTML = '<i class="fas fa-check"></i>';
-    } else {
-        toastIcon.className = 'w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs';
-        toastIcon.innerHTML = '<i class="fas fa-exclamation"></i>';
-    }
+            if (tipo === 'sucesso') {
+                toastIcon.className = 'w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs';
+                toastIcon.innerHTML = '<i class="fas fa-check"></i>';
+            } else {
+                toastIcon.className = 'w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs';
+                toastIcon.innerHTML = '<i class="fas fa-exclamation"></i>';
+            }
 
-    // Exibe o Toast
-    toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-
-    // Esconde automaticamente após 3.5 segundos
-    setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-    }, 3500);
-}
-
-// Exibe/Esconde a caixa de cadastro de nova categoria
-function toggleBoxNovaCategoria(exibir) {
-    const box = document.getElementById('boxNovaCategoria');
-    const input = document.getElementById('inputNomeCategoria');
-    
-    if (exibir) {
-        box.classList.remove('hidden');
-        if (input) input.focus();
-    } else {
-        box.classList.add('hidden');
-        if (input) input.value = '';
-    }
-}
-
-// Salva a nova categoria criada no input
-function salvarNovaCategoriaInline() {
-    const input = document.getElementById('inputNomeCategoria');
-    const nomeNova = input ? input.value.trim() : '';
-
-    if (!nomeNova) {
-        showToast('Atenção', 'Digite o nome da categoria antes de salvar.', 'alerta');
-        return;
-    }
-
-    const slug = 'custom_' + Date.now();
-    const novaCat = { value: slug, label: nomeNova };
-
-    // Registra a nova categoria
-    CATEGORIAS_CUSTOS.push(novaCat);
-
-    // Atualiza os selects já existentes na tela
-    document.querySelectorAll('#containerCustos .categoria-custo').forEach(select => {
-        const valorAtual = select.value;
-        select.innerHTML = CATEGORIAS_CUSTOS.map(cat => 
-            `<option value="${cat.value}" ${cat.value === valorAtual ? 'selected' : ''}>${cat.label}</option>`
-        ).join('');
-    });
-
-    // Cria uma nova linha apontando para essa categoria recém-criada
-    adicionarLinhaCusto(slug);
-
-    // Limpa e esconde o campo
-    toggleBoxNovaCategoria(false);
-    showToast('Categoria Criada', `A categoria "${nomeNova}" foi adicionada com sucesso!`);
-}
-
-function openFecharMesModal() {
-    const modal = document.getElementById('modalFecharMes');
-    if (modal) {
-        modal.classList.remove('hidden');
-
-        const mesInput = document.getElementById('mesReferencia');
-        if (mesInput && !mesInput.value) {
-            const hoje = new Date();
-            const ano = hoje.getFullYear();
-            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-            mesInput.value = `${ano}-${mes}`;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3500);
         }
 
-        const container = document.getElementById('containerCustos');
-        if (container && container.children.length === 0) {
-            adicionarLinhaCusto('energia');
-            adicionarLinhaCusto('agua');
+        function openModalAlertas() {
+            document.getElementById('modalAlertas').classList.remove('hidden');
         }
-    }
-}
 
-function closeFecharMesModal() {
-    const modal = document.getElementById('modalFecharMes');
-    if (modal) modal.classList.add('hidden');
-}
+        function closeModalAlertas() {
+            document.getElementById('modalAlertas').classList.add('hidden');
+        }
 
-// Adiciona uma linha de gasto com select e valor
-function adicionarLinhaCusto(categoriaSelecionada = 'gas', valor = '') {
-    const container = document.getElementById('containerCustos');
-    if (!container) return;
+        function concluirTarefa(checkbox) {
+            if (checkbox.checked) {
+                showToast('Feito!', 'Tarefa concluída. Ela sumirá ao atualizar a página.');
+            }
+        }
 
-    const divLinha = document.createElement('div');
-    divLinha.className = 'flex items-center space-x-2 item-custo animate-fade-in';
+        function toggleBoxNovaCategoria(exibir) {
+            const box = document.getElementById('boxNovaCategoria');
+            const input = document.getElementById('inputNomeCategoria');
+            if (exibir) {
+                box.classList.remove('hidden');
+                if (input) input.focus();
+            } else {
+                box.classList.add('hidden');
+                if (input) input.value = '';
+            }
+        }
 
-    const optionsHtml = CATEGORIAS_CUSTOS.map(cat => 
-        `<option value="${cat.value}" ${cat.value === categoriaSelecionada ? 'selected' : ''}>${cat.label}</option>`
-    ).join('');
+        function salvarNovaCategoriaInline() {
+            const input = document.getElementById('inputNomeCategoria');
+            const nomeNova = input ? input.value.trim() : '';
+            if (!nomeNova) {
+                showToast('Atenção', 'Digite o nome da categoria.', 'alerta');
+                return;
+            }
+            const slug = 'custom_' + Date.now();
+            CATEGORIAS_CUSTOS.push({ value: slug, label: nomeNova });
 
-    divLinha.innerHTML = `
-        <div class="w-1/2">
-            <select class="categoria-custo w-full px-3 py-2 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-[#E052A0] focus:border-[#E052A0] outline-none text-gray-800 transition">
-                ${optionsHtml}
-            </select>
-        </div>
-        <div class="w-1/2 relative">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-xs">R$</span>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="${valor}" required
-                class="valor-custo w-full pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-[#E052A0] focus:border-[#E052A0] outline-none text-gray-800 transition">
-        </div>
-        <button type="button" onclick="removerLinhaCusto(this)" title="Remover item"
-            class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer flex-shrink-0">
-            <i class="fas fa-trash-alt text-xs"></i>
-        </button>
-    `;
+            document.querySelectorAll('#containerCustos .categoria-custo').forEach(select => {
+                const valorAtual = select.value;
+                select.innerHTML = CATEGORIAS_CUSTOS.map(cat => 
+                    `<option value="${cat.value}" ${cat.value === valorAtual ? 'selected' : ''}>${cat.label}</option>`
+                ).join('');
+            });
 
-    container.appendChild(divLinha);
-}
+            adicionarLinhaCusto(slug);
+            toggleBoxNovaCategoria(false);
+            showToast('Sucesso', `Categoria "${nomeNova}" criada!`);
+        }
 
-function removerLinhaCusto(botao) {
-    const linha = botao.closest('.item-custo');
-    if (linha) linha.remove();
-}
-
-function salvarFechamentoMes(event) {
-    event.preventDefault();
-
-    const mes = document.getElementById('mesReferencia').value;
-    const itensCustos = [];
-    let totalCustos = 0;
-
-    document.querySelectorAll('#containerCustos .item-custo').forEach(linha => {
-        const select = linha.querySelector('.categoria-custo');
-        const valor = parseFloat(linha.querySelector('.valor-custo').value) || 0;
-        const categoriaNome = select.options[select.selectedIndex]?.text || select.value;
-
-        itensCustos.push({ 
-            categoriaKey: select.value,
-            categoriaNome: categoriaNome, 
-            valor: valor 
+        // NOVO: Adiciona um ouvinte para recarregar os dados se a pessoa trocar o mês no calendário
+        document.getElementById('mesReferencia').addEventListener('change', function(e) {
+            carregarCustosMes(e.target.value);
         });
-        totalCustos += valor;
-    });
 
-    const dadosFechamento = {
-        mes: mes,
-        custos: itensCustos,
-        totalCustos: totalCustos
-    };
-
-    console.log("Fechamento registrado com sucesso:", dadosFechamento);
-
-    // Substitui o alert por uma notificação Toast moderna
-    showToast('Mês Fechado!', `Mês ${mes} registrado com total de R$ ${totalCustos.toFixed(2)}`);
-    closeFecharMesModal();
-}
+        // ATUALIZADO: Agora ao abrir o modal, ele lê o banco de dados
         function openFecharMesModal() {
             const modal = document.getElementById('modalFecharMes');
             if (modal) {
                 modal.classList.remove('hidden');
-                // Define automaticamente o mês atual como padrão no input
                 const mesInput = document.getElementById('mesReferencia');
                 if (mesInput && !mesInput.value) {
                     const hoje = new Date();
@@ -522,53 +436,128 @@ function salvarFechamentoMes(event) {
                     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
                     mesInput.value = `${ano}-${mes}`;
                 }
+                
+                carregarCustosMes(mesInput.value);
             }
+        }
+
+        // NOVO: Função que busca os dados no Python e monta as linhas
+        function carregarCustosMes(mes) {
+            const container = document.getElementById('containerCustos');
+            container.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Carregando dados...</p>';
+
+            fetch(`/api/custos/${mes}`)
+                .then(res => res.json())
+                .then(data => {
+                    container.innerHTML = ''; 
+                    
+                    if (data.sucesso && data.custos.length > 0) {
+                        data.custos.forEach(custo => {
+                            // Se a categoria veio do banco e não está na lista inicial, adiciona ela para não quebrar
+                            const existe = CATEGORIAS_CUSTOS.find(c => c.value === custo.categoriaKey);
+                            if (!existe) {
+                                CATEGORIAS_CUSTOS.push({ value: custo.categoriaKey, label: custo.categoriaNome });
+                            }
+                        });
+                        
+                        data.custos.forEach(custo => {
+                            adicionarLinhaCusto(custo.categoriaKey, custo.valor);
+                        });
+                    } else {
+                        // Se o banco voltar vazio, coloca as duas linhas padrão
+                        adicionarLinhaCusto('energia');
+                        adicionarLinhaCusto('agua');
+                    }
+                })
+                .catch(err => {
+                    container.innerHTML = '';
+                    console.error('Erro ao buscar:', err);
+                    showToast('Atenção', 'Não foi possível carregar o histórico desse mês.', 'erro');
+                });
         }
 
         function closeFecharMesModal() {
             const modal = document.getElementById('modalFecharMes');
-            if (modal) {
-                modal.classList.add('hidden');
-            }
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function adicionarLinhaCusto(categoriaSelecionada = 'gas', valor = '') {
+            const container = document.getElementById('containerCustos');
+            const divLinha = document.createElement('div');
+            divLinha.className = 'flex items-center space-x-2 item-custo';
+
+            const optionsHtml = CATEGORIAS_CUSTOS.map(cat => 
+                `<option value="${cat.value}" ${cat.value === categoriaSelecionada ? 'selected' : ''}>${cat.label}</option>`
+            ).join('');
+
+            divLinha.innerHTML = `
+                <div class="w-1/2">
+                    <select class="categoria-custo w-full px-3 py-2 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-[#E052A0] outline-none transition">
+                        ${optionsHtml}
+                    </select>
+                </div>
+                <div class="w-1/2 relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-xs">R$</span>
+                    <input type="number" step="0.01" min="0" placeholder="0,00" value="${valor}" required
+                        class="valor-custo w-full pl-8 pr-3 py-2 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-[#E052A0] outline-none transition">
+                </div>
+                <button type="button" onclick="removerLinhaCusto(this)" class="p-2 text-gray-400 hover:text-red-500 rounded-lg transition"><i class="fas fa-trash-alt text-xs"></i></button>
+            `;
+            container.appendChild(divLinha);
+        }
+
+        function removerLinhaCusto(botao) {
+            const linha = botao.closest('.item-custo');
+            if (linha) linha.remove();
         }
 
         function salvarFechamentoMes(event) {
             event.preventDefault();
+            const mes = document.getElementById('mesReferencia').value;
+            let totalCustos = 0;
+            const itensCustos = [];
 
-            const dadosFechamento = {
-                mes: document.getElementById('mesReferencia').value,
-                gas: parseFloat(document.getElementById('custoGas').value) || 0,
-                energia: parseFloat(document.getElementById('custoEnergia').value) || 0,
-                outros: parseFloat(document.getElementById('custosOutros').value) || 0
-            };
+            document.querySelectorAll('#containerCustos .item-custo').forEach(linha => {
+                const select = linha.querySelector('.categoria-custo');
+                const valor = parseFloat(linha.querySelector('.valor-custo').value) || 0;
+                const categoriaNome = select.options[select.selectedIndex]?.text || select.value;
 
-            console.log("Dados do Fechamento de Mês:", dadosFechamento);
+                itensCustos.push({
+                    categoriaKey: select.value,
+                    categoriaNome: categoriaNome,
+                    valor: valor
+                });
+                totalCustos += valor;
+            });
 
-            // Exemplo: Enviar dados para o Flask via fetch API
-            /*
-            fetch('/fechar-mes', {
+            fetch('/salvar-custos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dadosFechamento)
-            }).then(res => res.json()).then(data => {
-                alert('Mês fechado com sucesso!');
-                closeFecharMesModal();
+                body: JSON.stringify({ mes: mes, custos: itensCustos })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.sucesso) {
+                    showToast('Mês Fechado!', `Mês ${mes} registrado com total de R$ ${totalCustos.toFixed(2)}`);
+                    closeFecharMesModal();
+                } else {
+                    showToast('Atenção', 'Erro ao salvar: ' + data.erro, 'erro');
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+                showToast('Erro de Conexão', 'Não foi possível contatar o servidor.', 'erro');
             });
-            */
-
-            alert(`Mês ${dadosFechamento.mes} fechado com sucesso!`);
-            closeFecharMesModal();
         }
+
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         }
 
-        // 1. Gráfico de Linha (Desempenho Financeiro)
         Plotly.newPlot('graficoLinha', [
-            { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [300, 340, 310, 370, 320, 420, 380, 440, 410, 430], name: 'Receita Total', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#10B981', width: 2 }, fillcolor: 'rgba(16, 185, 129, 0.1)' },
-            { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [230, 245, 235, 260, 250, 275, 265, 285, 275, 290], name: 'Custos Fixos', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#F59E0B', width: 2 }, fillcolor: 'rgba(245, 158, 11, 0.1)' },
-            { x: ['May 3', 'May 6', 'May 9', 'May 12', 'May 15', 'May 18', 'May 21', 'May 24', 'May 27', 'May 30'], y: [110, 125, 115, 135, 120, 145, 130, 155, 140, 150], name: 'Custo Ingredientes', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#EF4444', width: 2 }, fillcolor: 'rgba(239, 68, 68, 0.1)' }
+            { x: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'], y: [300, 340, 310, 370, 320, 420, 380, 440, 410, 430], name: 'Receita Total', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#10B981', width: 2 }, fillcolor: 'rgba(16, 185, 129, 0.1)' },
+            { x: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'], y: [230, 245, 235, 260, 250, 275, 265, 285, 275, 290], name: 'Custos Operacionais', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#F59E0B', width: 2 }, fillcolor: 'rgba(245, 158, 11, 0.1)' },
+            { x: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'], y: [110, 125, 115, 135, 120, 145, 130, 155, 140, 150], name: 'Custo Ingredientes', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#EF4444', width: 2 }, fillcolor: 'rgba(239, 68, 68, 0.1)' }
         ], {
             margin: { t: 20, b: 30, l: 40, r: 20 },
             legend: { orientation: 'h', y: 1.15, x: 0 },
@@ -576,7 +565,6 @@ function salvarFechamentoMes(event) {
             yaxis: { gridcolor: '#F3F4F6' }
         }, { responsive: true });
 
-        // 2. Gráfico Donut
         const catLabels = {{ cat_labels | tojson }};
         const catValues = {{ cat_values | tojson }};
 
@@ -594,13 +582,12 @@ function salvarFechamentoMes(event) {
             annotations: [{
                 font: { size: 11, weight: 'bold', color: '#6B7280' },
                 showarrow: false,
-                text: 'LUCRO TOTAL<br><span style="font-size:13px; color:#111827; font-weight:bold;">R$ 8.540,70</span>',
+                text: 'RECEITA TOTAL<br><span style="font-size:13px; color:#111827; font-weight:bold;">R$ 8.540,70</span>',
                 x: 0.5,
                 y: 0.5
             }]
         }, { responsive: true });
 
-        // 3. Gráfico de Margem por Item do Cardápio (Corrigido os seletores Jinja2)
         const dadosMargem = {
             nomes: {{ nomes_receitas | tojson }},
             custo_pct: {{ custo_pcts | tojson }},
@@ -613,14 +600,14 @@ function salvarFechamentoMes(event) {
         if (dadosMargem.nomes.length > 0) {
             Plotly.newPlot('chart-margem', [
                 {
-                    y: dadosMargem.nomes, x: dadosMargem.custo_pct, name: 'Custo dos Insumos (CMV)',
+                    y: dadosMargem.nomes, x: dadosMargem.custo_pct, name: 'Custo dos Insumos (CMPM)',
                     type: 'bar', orientation: 'h', marker: { color: '#E5484D' },
-                    text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textfont: { color: 'white', size: 10 }
+                    text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }
                 },
                 {
                     y: dadosMargem.nomes, x: dadosMargem.margem_pct_v, name: 'Margem de Lucro Bruta',
                     type: 'bar', orientation: 'h', marker: { color: '#1F9D6E' },
-                    text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textfont: { color: 'white', size: 10 }
+                    text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }
                 }
             ], {
                 barmode: 'stack',
@@ -647,5 +634,4 @@ function salvarFechamentoMes(event) {
         }
     </script>
 </body>
-
 </html>

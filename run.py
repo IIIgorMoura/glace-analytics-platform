@@ -98,6 +98,17 @@ def init_db():
             FOREIGN KEY (receita_id) REFERENCES receitas (id)
         )
     ''')
+
+    # 7. Custos Operacionais (NOVA TABELA)
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS custos_operacionais (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            mes_referencia TEXT NOT NULL,
+            categoria_key TEXT NOT NULL,
+            categoria_nome TEXT NOT NULL,
+            valor REAL NOT NULL
+        )
+    ''')
     
     conn.commit()
     conn.close()
@@ -115,4 +126,5 @@ app.register_blueprint(dashboard_bp)
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5000)
+    # Acesso via rede local habilitado (0.0.0.0)
+    app.run(host='0.0.0.0', debug=True, port=5000)
