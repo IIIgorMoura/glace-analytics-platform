@@ -12,13 +12,20 @@ def get_db_connection():
 @pedidos_bp.route('/pedidos')
 def index():
     conn = get_db_connection()
-    
-    # Atualização automática para status 'Atrasado' se data_entrega < hoje e status for 'Pendente'
     hoje = date.today().isoformat()
+    
+    # 1. Atualização automática: Pendente -> Atrasado se a data passou
     conn.execute('''
         UPDATE pedidos 
         SET status = 'Atrasado' 
         WHERE status = 'Pendente' AND data_entrega IS NOT NULL AND data_entrega < ?
+    ''', (hoje,))
+    
+    # 2. Atualização automática inversa: Atrasado -> Pendente se a data foi prorrogada
+    conn.execute('''
+        UPDATE pedidos 
+        SET status = 'Pendente' 
+        WHERE status = 'Atrasado' AND data_entrega IS NOT NULL AND data_entrega >= ?
     ''', (hoje,))
     conn.commit()
     
@@ -156,6 +163,7 @@ def lista_compras():
         'lista': lista,
         'custo_total': custo_total
     })
+
 @pedidos_bp.route('/api/pedidos/novo', methods=['POST'])
 def novo_pedido():
     data = request.json
@@ -168,14 +176,17 @@ def novo_pedido():
 
     valor_total = sum(float(item['quantidade']) * float(item['preco_unitario']) for item in itens)
 
+    hoje = date.today().isoformat()
+    status_inicial = 'Atrasado' if data_entrega and data_entrega < hoje else 'Pendente'
+
     conn = get_db_connection()
     cursor = conn.cursor()
     
     try:
         cursor.execute('''
-            INSERT INTO pedidos (cliente_nome, data_entrega, valor_total) 
-            VALUES (?, ?, ?)
-        ''', (cliente, data_entrega, valor_total))
+            INSERT INTO pedidos (cliente_nome, data_entrega, valor_total, status) 
+            VALUES (?, ?, ?, ?)
+        ''', (cliente, data_entrega, valor_total, status_inicial))
         
         pedido_id = cursor.lastrowid
         
@@ -232,11 +243,25 @@ def editar_pedido(pedido_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
+        # Verifica qual é o status atual no banco
+        pedido_atual = cursor.execute('SELECT status FROM pedidos WHERE id = ?', (pedido_id,)).fetchone()
+        status_atual = pedido_atual['status'] if pedido_atual else 'Pendente'
+        
+        novo_status = status_atual
+        hoje = date.today().isoformat()
+        
+        # Se não estiver finalizado, reavalia a data automaticamente
+        if status_atual in ('Pendente', 'Atrasado'):
+            if data_entrega and data_entrega < hoje:
+                novo_status = 'Atrasado'
+            else:
+                novo_status = 'Pendente'
+
         cursor.execute('''
             UPDATE pedidos 
-            SET cliente_nome = ?, data_entrega = ?, valor_total = ?
+            SET cliente_nome = ?, data_entrega = ?, valor_total = ?, status = ?
             WHERE id = ?
-        ''', (cliente, data_entrega, valor_total, pedido_id))
+        ''', (cliente, data_entrega, valor_total, novo_status, pedido_id))
         
         cursor.execute('DELETE FROM itens_pedido WHERE pedido_id = ?', (pedido_id,))
         for item in itens:
