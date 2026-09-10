@@ -40,7 +40,7 @@
             <button onclick="openFecharMesModal()"
                 class="bg-[#E052A0] hover:bg-[#c9418b] text-white font-semibold px-3 py-2 rounded-lg text-xs md:text-sm transition flex items-center space-x-1 md:space-x-2 shadow-lg shadow-[#E052A0]/20 cursor-pointer">
                 <i class="fas fa-calculator text-xs"></i>
-                <span class="hidden sm:inline">Custos operacionais</span>
+                <span class="hidden sm:inline">Custos Operacionais</span>
                 <span class="sm:hidden">Custos</span>
             </button>
 
@@ -180,7 +180,7 @@
 
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h3 class="font-bold text-lg text-gray-900">Margem de Lucro por Item do Cardápio</h3>
-            <p class="text-xs text-gray-400 mb-4">Cada barra = 100% do preço de venda · vermelho = CMPM (Custo de Insumos) · verde = margem de lucro bruta</p>
+            <p class="text-xs text-gray-400 mb-4">Cada barra = 100% do preço de venda · Vermelho = CMPM (Custo de Insumos) · Verde = margem de lucro bruta</p>
             <div id="chart-margem" class="w-full"></div>
             <p class="text-xs text-gray-500 mt-3 font-medium" id="legenda-margem"></p>
         </div>
@@ -568,7 +568,7 @@
             },
             { 
                 x: mesesLinha, y: linhaCustosOp, 
-                name: 'Custos operacionais', type: 'scatter', mode: 'lines', 
+                name: 'Custos Operacionais', type: 'scatter', mode: 'lines', 
                 line: { color: '#F59E0B', width: 3, shape: 'spline' },
                 fill: 'tozeroy', fillcolor: 'rgba(245, 158, 11, 0.05)',
                 hovertemplate: '<b>%{x}</b><br>R$ %{y:.2f}<extra></extra>'
@@ -653,18 +653,28 @@
                 {
                     y: formatNames, x: dadosMargem.custo_pct, name: 'Custo de Insumos (CMPM)',
                     type: 'bar', orientation: 'h', marker: { color: '#E5484D' },
-                    text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }, constraintext: 'none'
+                    text: dadosMargem.custo_pct.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }, constraintext: 'none',
+                    hovertemplate: '<extra></extra>'
                 },
                 {
                     y: formatNames, x: dadosMargem.margem_pct_v, name: 'Margem de Lucro Bruta',
                     type: 'bar', orientation: 'h', marker: { color: '#1F9D6E' },
-                    text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }, constraintext: 'none'
+                    text: dadosMargem.margem_pct_v.map(v => v.toFixed(0) + '%'), textposition: 'inside', textangle: 0, textfont: { color: 'white', size: 10 }, constraintext: 'none',
+                    hovertemplate: '<extra></extra>'
                 }
             ], {
                 barmode: 'stack',
                 height: alturaMargem,
                 margin: { l: 150, r: 70, t: 10, b: 35 },
-                yaxis: { type: 'category', automargin: true },
+                yaxis: {
+                    type: 'category',
+                    automargin: true,
+                    ticklabelposition: 'outside',
+                    ticks: 'outside',
+                    ticklen: 0,
+                    tickcolor: 'black',
+                    tickfont: { color: '#374151', size: 12 }
+                },
                 xaxis: { title: '% do Preço de Venda', ticksuffix: '%', range: [0, 100] },
                 legend: { orientation: 'h', y: 1.15, x: 0, font: { size: 11 } },
                 font: { family: 'Inter, sans-serif' },
